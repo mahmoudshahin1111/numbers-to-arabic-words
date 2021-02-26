@@ -1,0 +1,24 @@
+{
+  "name": "numbers_to_words",
+  "version": "1.0.0",
+  "description": "convert english numbers to arabic words",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc & node index.js"
+  },
+  "keywords": [
+    "arabic",
+    "numbers",
+    "convert_numbers_to_arabic_words"
+  ],
+  "author": "mahmoudshahin1111@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@types/fs-extra": "^9.0.7",
+    "fs": "0.0.1-security",
+    "fs-extra": "^9.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31"
+  }
+}
