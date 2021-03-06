@@ -35,7 +35,7 @@ const numbersWords = [
 ];
 const delimiter = 'و';
 fs.writeFileSync('output.txt', '');
-const testCase = [1059, 14, 15, 16, 13, 18, 102, 100, 50, 68, 92, 91, 985, 850, 640, 599, 513, 25, 631, 10, 8, 5, 3, 1, 2, 0, 54, 168896555, 569875156987, 569875156987856];
+const testCase = [1059, 2059, 14, 15, 16, 13, 18, 102, 100, 50, 68, 92, 91, 985, 850, 640, 599, 513, 25, 631, 10, 8, 5, 3, 1, 2, 0, 54, 168896555, 569875156987, 569875156987856];
 testCase.forEach(number => {
     const word = toArabicWord(number);
     fs.appendFileSync('output.txt', word + '\n');
@@ -71,6 +71,50 @@ function convertPartsToWords(parts) {
 }
 function convertPartToWord(part, partPosition) {
     // translate every number based on position in the part (singular|tens|hundreds)
+    if (partPosition === 1) {
+        return convertThousandsPartToWord(part);
+    }
+    else if (partPosition === 2) {
+        return convertMillionsPartToWord(part);
+    }
+    else if (partPosition === 3) {
+        return convertBillionsPartToWord(part);
+    }
+    else {
+        return convertHundredsPartToWord(part);
+    }
+}
+function convertThousandsPartToWord(part) {
+    let phase = '';
+    if (!part[2] && !part[1]) {
+        if (part[0] == 1) {
+            phase = 'الف';
+        }
+        else if (part[0] == 2) {
+            phase = 'الفان';
+        }
+    }
+    else {
+        if (part[2] > 0) {
+            phase = `${convertNumberToWord(part[2], 2)}`;
+            if (part[1] || part[0]) {
+                phase += ` ${delimiter} `;
+            }
+        }
+        if (part[0]) {
+            phase += `${convertNumberToWord(part[0], 0)}`;
+            if (part[1] > 1) {
+                phase += ` ${delimiter} `;
+            }
+        }
+        if (part[1]) {
+            phase += `${convertNumberToWord(part[1], 1)}`;
+        }
+        phase = `${phase} الف`;
+    }
+    return phase;
+}
+function convertHundredsPartToWord(part) {
     let phase = '';
     if (part[2] > 0) {
         phase = `${convertNumberToWord(part[2], 2)}`;
@@ -87,7 +131,45 @@ function convertPartToWord(part, partPosition) {
     if (part[1]) {
         phase += `${convertNumberToWord(part[1], 1)}`;
     }
-    return phase;
+    return `${phase}`;
+}
+function convertMillionsPartToWord(part) {
+    let phase = '';
+    if (part[2] > 0) {
+        phase = `${convertNumberToWord(part[2], 2)}`;
+        if (part[1] || part[0]) {
+            phase += ` ${delimiter} `;
+        }
+    }
+    if (part[0]) {
+        phase += `${convertNumberToWord(part[0], 0)}`;
+        if (part[1] > 1) {
+            phase += ` ${delimiter} `;
+        }
+    }
+    if (part[1]) {
+        phase += `${convertNumberToWord(part[1], 1)}`;
+    }
+    return `${phase} مليون`;
+}
+function convertBillionsPartToWord(part) {
+    let phase = '';
+    if (part[2] > 0) {
+        phase = `${convertNumberToWord(part[2], 2)}`;
+        if (part[1] || part[0]) {
+            phase += ` ${delimiter} `;
+        }
+    }
+    if (part[0]) {
+        phase += `${convertNumberToWord(part[0], 0)}`;
+        if (part[1] > 1) {
+            phase += ` ${delimiter} `;
+        }
+    }
+    if (part[1]) {
+        phase += `${convertNumberToWord(part[1], 1)}`;
+    }
+    return `${phase} مليار`;
 }
 function convertNumberToWord(number, numberPosition) {
     let word = '';
@@ -157,19 +239,5 @@ function convertNumberWordToSingularWord(number) {
     return word;
 }
 function joinPartsWithPrefixes(parts) {
-    let phase = '';
-    if (parts[4]) {
-        phase += `${parts[4]} دشيليون ${delimiter}`;
-    }
-    if (parts[3]) {
-        phase += `${parts[3]} مليار ${delimiter}`;
-    }
-    if (parts[2]) {
-        phase += `${parts[2]} مليون ${delimiter}`;
-    }
-    if (parts[1]) {
-        phase += `${parts[1]} الف ${delimiter}`;
-    }
-    phase += `${parts[0]}`;
-    return phase;
+    return parts.reverse().join(` ${delimiter} `);
 }

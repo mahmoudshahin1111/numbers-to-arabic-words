@@ -1,94 +1,179 @@
-import * as fs from 'fs-extra';
-
+import * as fs from "fs-extra";
 
 const numbersWords = [
-    'صفر',
-    'احد',
-    'اثن',
-    'ثلاث',
-    'اريع',
-    'خمس',
-    'ست',
-    'سبع',
-    'ثمان',
-    'تسع',
-    'عشر',
+    "صفر",
+    "احد",
+    "اثن",
+    "ثلاث",
+    "اريع",
+    "خمس",
+    "ست",
+    "سبع",
+    "ثمان",
+    "تسع",
+    "عشر",
 ];
-const delimiter = 'و';
+const delimiter = "و";
 
-
-
-fs.writeFileSync('output.txt', '');
-const testCase = [1059,2059, 14, 15, 16, 13, 18, 102, 100, 50, 68, 92, 91, 985, 850, 640, 599, 513, 25, 631, 10, 8, 5, 3, 1, 2, 0, 54, 168896555, 569875156987, 569875156987856];
-testCase.forEach(number => {
+fs.writeFileSync("output.txt", "");
+const testCase = [
+    1059,
+    2059,
+    14,
+    15,
+    16,
+    13,
+    18,
+    102,
+    100,
+    50,
+    68,
+    92,
+    91,
+    985,
+    850,
+    640,
+    599,
+    513,
+    25,
+    631,
+    10,
+    8,
+    5,
+    3,
+    1,
+    2,
+    0,
+    54,
+    168896555,
+    569875156987,
+    569875156987856,
+];
+testCase.forEach((number) => {
     const word = toArabicWord(number);
-    fs.appendFileSync('output.txt', word + '\n');
+    fs.appendFileSync("output.txt", word + "\n");
 });
 
+const TRANSFORM_LAYERS = [
+    // DivideToParts
+];
 
+
+class LibInput {
+    public parts: number[][] = [];
+    public words:string[] = [];
+    constructor(public input: number) {
+
+    }
+    getInputLength() {
+        return this.input.toString().length;
+    }
+    getCharAt(i: number) {
+        return this.input.toString().charAt(i);
+    }
+
+}
+type TransformNextFunc = (input: LibInput) => LibInput;
+interface ITransformLayer {
+    execute: TransformNextFunc;
+}
+class TransformLayer implements ITransformLayer {
+    protected nextLayer: TransformLayer = new TransformLayer();
+    setNext(layer: TransformLayer): void {
+        throw new Error("Method not implemented.");
+    }
+    protected next(input: LibInput): LibInput {
+        throw new Error("Method not implemented.");
+    }
+
+    public execute(
+        input: LibInput,
+    ): LibInput {
+        throw "No Execution Function";
+    }
+
+}
+
+class DivideToParts extends TransformLayer {
+    public execute(input: LibInput): LibInput {
+        for (let i = input.getInputLength() - 1; i >= 0; i -= 3) {
+            const part: number[] = [];
+            for (let c = i; c > i - 3; c--) {
+                part.push(Number(input.getCharAt(c)));
+            }
+            input.parts.push(part);
+        }
+        return this.next(input);
+    }
+}
+class ConvertPartsToWords extends TransformLayer {
+    public execute(input: LibInput): LibInput {
+        for (let pI = 0; pI < input.parts.length; pI++) {
+            input.words.push(convertPartToWord(input.parts[pI], pI));
+        }
+        return this.next(input);
+    }
+
+}
+class JonPartWithPrefixed extends TransformLayer {
+    public execute(input: LibInput): LibInput {
+        return this.next(input);
+    }
+
+}
 
 function toArabicWord(number: number) {
-    // get number 
+    // get number
     // split number every 3 places
     // convert every part to words
     // print all number
-    const parts = getNumberParts(number);
-    const partsAsWords = convertPartsToWords(parts);
-    const phase = joinPartsWithPrefixes(partsAsWords);
-    return phase;
+    let divideToParts = new DivideToParts();
+    let convertPartsToWords = new ConvertPartsToWords();
+    let joinPartWithPrefixed = new JonPartWithPrefixed();
+    divideToParts.setNext(convertPartsToWords);
+    convertPartsToWords.setNext(joinPartWithPrefixed);
+    divideToParts.execute(new LibInput(number));
+    // const partsAsWords = convertPartsToWords(parts);
+    // const phase = joinPartsWithPrefixes(partsAsWords);
+    return joinPartWithPrefixed;
 }
-function getNumberParts(num: number): number[][] {
-    // convert numbers array to parts every part has 3 numbers
+// function getNumberParts(num: number): number[][] {
+//   // convert numbers array to parts every part has 3 numbers
 
-    const parts: number[][] = [];
-    for (let i = num.toString().length - 1; i >= 0; i -= 3) {
-        const part: number[] = [];
-        for (let c = i; c > i - 3; c--) {
-            part.push(Number(num.toString().charAt(c)));
-        }
-        parts.push(part);
-    }
-    return parts;
-}
+//   const parts: number[][] = [];
+//   for (let i = num.toString().length - 1; i >= 0; i -= 3) {
+//     const part: number[] = [];
+//     for (let c = i; c > i - 3; c--) {
+//       part.push(Number(num.toString().charAt(c)));
+//     }
+//     parts.push(part);
+//   }
+//   return parts;
+// }
 
-
-
-function convertPartsToWords(parts: number[][]): string[] {
-    const words: string[] = [];
-    for (let pI = 0; pI < parts.length; pI++) {
-        words.push(convertPartToWord(parts[pI], pI));
-    }
-    return words;
-}
 function convertPartToWord(part: number[], partPosition: number): string {
     // translate every number based on position in the part (singular|tens|hundreds)
 
     if (partPosition === 1) {
         return convertThousandsPartToWord(part);
-    }
-    else if (partPosition === 2) {
+    } else if (partPosition === 2) {
         return convertMillionsPartToWord(part);
-    }
-    else if (partPosition === 3) {
+    } else if (partPosition === 3) {
         return convertBillionsPartToWord(part);
-    }
-    else{
+    } else {
         return convertHundredsPartToWord(part);
     }
-
 }
 function convertThousandsPartToWord(part: number[]) {
     //TODO:: Code is repeated this not good practice
-    let phase = '';
-    if(!part[2] && !part[1]){
-       if(part[0] == 1){
-        phase =  'الف'
-       }
-       else if(part[0] == 2){
-        phase =  'الفان';
-       }
-    }
-    else{
+    let phase = "";
+    if (!part[2] && !part[1]) {
+        if (part[0] == 1) {
+            phase = "الف";
+        } else if (part[0] == 2) {
+            phase = "الفان";
+        }
+    } else {
         if (part[2] > 0) {
             phase = `${convertNumberToWord(part[2], 2)}`;
             if (part[1] || part[0]) {
@@ -103,16 +188,15 @@ function convertThousandsPartToWord(part: number[]) {
         }
         if (part[1]) {
             phase += `${convertNumberToWord(part[1], 1)}`;
-    
         }
         phase = `${phase} الف`;
     }
-    
+
     return phase;
 }
 function convertHundredsPartToWord(part: number[]) {
-    let phase = '';
-    
+    let phase = "";
+
     if (part[2] > 0) {
         phase = `${convertNumberToWord(part[2], 2)}`;
         if (part[1] || part[0]) {
@@ -127,12 +211,11 @@ function convertHundredsPartToWord(part: number[]) {
     }
     if (part[1]) {
         phase += `${convertNumberToWord(part[1], 1)}`;
-
     }
     return `${phase}`;
 }
 function convertMillionsPartToWord(part: number[]) {
-    let phase = '';
+    let phase = "";
     if (part[2] > 0) {
         phase = `${convertNumberToWord(part[2], 2)}`;
         if (part[1] || part[0]) {
@@ -147,12 +230,11 @@ function convertMillionsPartToWord(part: number[]) {
     }
     if (part[1]) {
         phase += `${convertNumberToWord(part[1], 1)}`;
-
     }
     return `${phase} مليون`;
 }
 function convertBillionsPartToWord(part: number[]) {
-    let phase = '';
+    let phase = "";
     if (part[2] > 0) {
         phase = `${convertNumberToWord(part[2], 2)}`;
         if (part[1] || part[0]) {
@@ -167,13 +249,11 @@ function convertBillionsPartToWord(part: number[]) {
     }
     if (part[1]) {
         phase += `${convertNumberToWord(part[1], 1)}`;
-
     }
     return `${phase} مليار`;
 }
 function convertNumberToWord(number: number, numberPosition: number): string {
-
-    let word = '';
+    let word = "";
     switch (numberPosition) {
         case 0:
             word = `${convertNumberWordToSingularWord(number)}`;
