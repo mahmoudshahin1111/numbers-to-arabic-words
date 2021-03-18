@@ -20,224 +20,138 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs-extra"));
-const numbersWords = [
-    'صفر',
-    'احد',
-    'اثن',
-    'ثلاث',
-    'اريع',
-    'خمس',
-    'ست',
-    'سبع',
-    'ثمان',
-    'تسع',
-    'عشر',
-];
-const delimiter = 'و';
-fs.writeFileSync('output.txt', '');
-const testCase = [1059, 2059, 14, 15, 16, 13, 18, 102, 100, 50, 68, 92, 91, 985, 850, 640, 599, 513, 25, 631, 10, 8, 5, 3, 1, 2, 0, 54, 168896555, 569875156987, 569875156987856];
-testCase.forEach(number => {
+fs.writeFileSync("output.txt", "");
+const testCase = [123, 200, 851, 502, 569, 214, 300, 501, 991];
+testCase.forEach((number) => {
     const word = toArabicWord(number);
-    fs.appendFileSync('output.txt', word + '\n');
+    fs.appendFileSync("output.txt", word + "\n");
 });
-function toArabicWord(number) {
-    // get number 
-    // split number every 3 places
-    // convert every part to words
-    // print all number
-    const parts = getNumberParts(number);
-    const partsAsWords = convertPartsToWords(parts);
-    const phase = joinPartsWithPrefixes(partsAsWords);
-    return phase;
+function toArabicWord(num) {
+    return getPartAsWord(num);
 }
-function getNumberParts(num) {
-    // convert numbers array to parts every part has 3 numbers
-    const parts = [];
-    for (let i = num.toString().length - 1; i >= 0; i -= 3) {
-        const part = [];
-        for (let c = i; c > i - 3; c--) {
-            part.push(Number(num.toString().charAt(c)));
+function getPartAsWord(num, delimiter = "و") {
+    if (num >= 0 && num < 10) {
+        return getSingularWord(num);
+    }
+    else if (num >= 10 && num < 99) {
+        return getTensWord(num);
+    }
+    else if (num >= 100 && num < 1000) {
+        let hundreds = Number(num.toString()[0]);
+        let tens = Number(num % 100);
+        let word = "";
+        if (hundreds > 0) {
+            word = ` ${getHundredsWord(hundreds)} `;
         }
-        parts.push(part);
-    }
-    return parts;
-}
-function convertPartsToWords(parts) {
-    const words = [];
-    for (let pI = 0; pI < parts.length; pI++) {
-        words.push(convertPartToWord(parts[pI], pI));
-    }
-    return words;
-}
-function convertPartToWord(part, partPosition) {
-    // translate every number based on position in the part (singular|tens|hundreds)
-    if (partPosition === 1) {
-        return convertThousandsPartToWord(part);
-    }
-    else if (partPosition === 2) {
-        return convertMillionsPartToWord(part);
-    }
-    else if (partPosition === 3) {
-        return convertBillionsPartToWord(part);
-    }
-    else {
-        return convertHundredsPartToWord(part);
+        if (tens > 0) {
+            word += `${delimiter} ${getTensWord(tens)} `;
+        }
+        return word;
     }
 }
-function convertThousandsPartToWord(part) {
-    let phase = '';
-    if (!part[2] && !part[1]) {
-        if (part[0] == 1) {
-            phase = 'الف';
-        }
-        else if (part[0] == 2) {
-            phase = 'الفان';
+function getTensWord(num, delimiter = "و") {
+    if (num >= 1 && num < 10) {
+        return getSingularWord(num);
+    }
+    else if (num >= 10 && num < 12) {
+        switch (num) {
+            case 10:
+                return "عشر";
+            case 11:
+                return "احدي عشر";
+            case 12:
+                return "اثنا عشر";
         }
     }
-    else {
-        if (part[2] > 0) {
-            phase = `${convertNumberToWord(part[2], 2)}`;
-            if (part[1] || part[0]) {
-                phase += ` ${delimiter} `;
-            }
-        }
-        if (part[0]) {
-            phase += `${convertNumberToWord(part[0], 0)}`;
-            if (part[1] > 1) {
-                phase += ` ${delimiter} `;
-            }
-        }
-        if (part[1]) {
-            phase += `${convertNumberToWord(part[1], 1)}`;
-        }
-        phase = `${phase} الف`;
+    else if (num >= 13 && num < 19) {
+        const secondDigit = Number(num.toString()[1]);
+        return `${getSingularWord(secondDigit)} عشر`;
     }
-    return phase;
+    else if (num >= 13 && num < 99) {
+        let word = "";
+        const firstDigit = Number(num.toString()[1]);
+        const secondDigit = Number(num.toString()[0]);
+        word = `${getSingularWord(firstDigit)} ${delimiter}`;
+        switch (secondDigit) {
+            case 2:
+                word += "عشرون";
+                break;
+            default:
+                word += `${getSingularWord(secondDigit)}ون`;
+        }
+        return word;
+    }
+    return "";
 }
-function convertHundredsPartToWord(part) {
-    let phase = '';
-    if (part[2] > 0) {
-        phase = `${convertNumberToWord(part[2], 2)}`;
-        if (part[1] || part[0]) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[0]) {
-        phase += `${convertNumberToWord(part[0], 0)}`;
-        if (part[1] > 1) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[1]) {
-        phase += `${convertNumberToWord(part[1], 1)}`;
-    }
-    return `${phase}`;
-}
-function convertMillionsPartToWord(part) {
-    let phase = '';
-    if (part[2] > 0) {
-        phase = `${convertNumberToWord(part[2], 2)}`;
-        if (part[1] || part[0]) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[0]) {
-        phase += `${convertNumberToWord(part[0], 0)}`;
-        if (part[1] > 1) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[1]) {
-        phase += `${convertNumberToWord(part[1], 1)}`;
-    }
-    return `${phase} مليون`;
-}
-function convertBillionsPartToWord(part) {
-    let phase = '';
-    if (part[2] > 0) {
-        phase = `${convertNumberToWord(part[2], 2)}`;
-        if (part[1] || part[0]) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[0]) {
-        phase += `${convertNumberToWord(part[0], 0)}`;
-        if (part[1] > 1) {
-            phase += ` ${delimiter} `;
-        }
-    }
-    if (part[1]) {
-        phase += `${convertNumberToWord(part[1], 1)}`;
-    }
-    return `${phase} مليار`;
-}
-function convertNumberToWord(number, numberPosition) {
-    let word = '';
-    switch (numberPosition) {
+function getSingularWord(num) {
+    let singularWord = "";
+    switch (Number(num)) {
         case 0:
-            word = `${convertNumberWordToSingularWord(number)}`;
+            singularWord = "صفر";
             break;
         case 1:
-            word = `${convertNumberWordToTensWord(number)}`;
+            singularWord = "واحد";
             break;
         case 2:
-            word = `${convertNumberToHundredsWord(number)}`;
+            singularWord = "اثنان";
+            break;
+        case 3:
+            singularWord = "ثلاث";
+            break;
+        case 4:
+            singularWord = "اربع";
+            break;
+        case 5:
+            singularWord = "خمس";
+            break;
+        case 6:
+            singularWord = "ست";
+            break;
+        case 7:
+            singularWord = "سبع";
+            break;
+        case 8:
+            singularWord = "ثمان";
+            break;
+        case 9:
+            singularWord = "تسع";
             break;
     }
-    return word;
+    return singularWord;
 }
-function convertNumberToHundredsWord(number) {
-    // get number word and return new format based on position as in hundred position
-    let word = numbersWords[number];
-    switch (number) {
+function getHundredsWord(num) {
+    let hundredsWord = "";
+    switch (Number(num)) {
         case 0:
-            word = ``;
+            hundredsWord = "";
             break;
         case 1:
-            word = `مائه`;
+            hundredsWord = "مائه";
             break;
         case 2:
-            word = `مائتان`;
+            hundredsWord = "مائتان";
             break;
-        default:
-            word += `مائه`;
+        case 3:
+            hundredsWord = "ثلاثمائه";
             break;
-    }
-    return word;
-}
-function convertNumberWordToTensWord(number) {
-    let word = numbersWords[number];
-    switch (number) {
-        case 0:
-            word = ``;
+        case 4:
+            hundredsWord = "اربعمائه";
             break;
-        case 1:
-            word = ` عشر`;
+        case 5:
+            hundredsWord = "خمسمائه";
             break;
-        case 2:
-            word = ` عشرون`;
+        case 6:
+            hundredsWord = "ستمائه";
             break;
-        default:
-            word += `ون`;
+        case 7:
+            hundredsWord = "سبعمائه";
             break;
-    }
-    return word;
-}
-function convertNumberWordToSingularWord(number) {
-    let word = numbersWords[number];
-    switch (number) {
-        case 0:
-            word = ``;
+        case 8:
+            hundredsWord = "ثمانمائه";
             break;
-        case 1:
-            word = `و${word}`;
-            break;
-        case 2:
-            word += `ان`;
+        case 9:
+            hundredsWord = "تسعمائه";
             break;
     }
-    return word;
-}
-function joinPartsWithPrefixes(parts) {
-    return parts.reverse().join(` ${delimiter} `);
+    return hundredsWord;
 }
