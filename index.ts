@@ -1,38 +1,174 @@
 import * as fs from "fs-extra";
 
 fs.writeFileSync("output.txt", "");
-const testCase = [123, 200, 851, 502, 569, 214, 300, 501, 991];
+const testCase = [
+  123,
+  1123,
+  1000000,
+  999,
+  5689492285,
+  999999999999999,
+  200,
+  851,
+  8011,
+  8012,
+  8013,
+  8020,
+  1053,
+  502,
+  569,
+  214,
+  300,
+  501,
+  991,
+  989,
+  1000,
+  998,
+  999,
+];
 testCase.forEach((number) => {
   const word = toArabicWord(number);
   fs.appendFileSync("output.txt", word + "\n");
 });
 
-function toArabicWord(num: number) {
-  //TODO: split number parts every part has 3 numbers
-  //TODO: parse every part.
+function toArabicWord(num: number, delimiter = " و ") {
   //TODO:  join parts with delimiter
   //TODO: set part title as ألف and stuff like that.
-  return getPartAsWord(num);
+  if (num >= 1000) {
+    let numChars: string[] = num.toString().split("").reverse();
+    let parts: number[] = [];
+    for (let i = 0; i < numChars.length; i += 3) {
+      let part: string[] = [];
+      for (let j = i; j < i + 3; j++) {
+        part.push(numChars[j]);
+      }
+
+      parts.push(Number(part.reverse().join("")));
+    }
+    console.log(parts);
+    let word = "";
+    if (parts[4] != null) {
+      const numWord = `${getTrillionPartAsWord(parts[4])}`;
+      if (word != "" && numWord != "") {
+        word += `${delimiter}${numWord}`;
+      } else {
+        word += numWord;
+      }
+    }
+    if (parts[3] != null) {
+      const numWord = `${getBillionsPartAsWord(parts[3])}`;
+      if (word != "" && numWord != "") {
+        word += `${delimiter}${numWord}`;
+      } else {
+        word += numWord;
+      }
+    }
+    if (parts[2] != null) {
+      const numWord = `${getMillionsPartAsWord(parts[2])}`;
+      if (word != "" && numWord != "") {
+        word += `${delimiter}${numWord}`;
+      } else {
+        word += numWord;
+      }
+    }
+    if (parts[1] != null) {
+      const numWord = `${getThousandPartAsWord(parts[1])}`;
+      if (word != "" && numWord != "") {
+        word += `${delimiter}${numWord}`;
+      } else {
+        word += numWord;
+      }
+    }
+    if (parts[0] != null) {
+      const numWord = `${getHundredsPartAsWord(parts[0])}`;
+      if (word != "" && numWord != "") {
+        word += `${delimiter}${numWord}`;
+      } else {
+        word += numWord;
+      }
+    }
+    return word.trim();
+  } else {
+    return getPartAsWord(num);
+  }
 }
-function getPartAsWord(num: number, delimiter: string = "و") {
+
+function getTrillionPartAsWord(num: number): string {
+  if (num === 0) {
+    return "";
+  } else if (num === 1) {
+    return "بليون";
+  } else if (num === 2) {
+    return "بليونان";
+  } else {
+    return `${getPartAsWord(num)} بليون`;
+  }
+}
+function getBillionsPartAsWord(num: number): string {
+  if (num === 0) {
+    return "";
+  } else if (num === 1) {
+    return "مليار";
+  } else if (num === 2) {
+    return "ملياران";
+  } else {
+    return `${getPartAsWord(num)} مليار`;
+  }
+}
+
+function getMillionsPartAsWord(num: number): string {
+  if (num === 0) {
+    return "";
+  } else if (num === 1) {
+    return "مليون";
+  } else if (num === 2) {
+    return "مليونان";
+  } else {
+    return `${getPartAsWord(num)} مليون`;
+  }
+}
+
+function getThousandPartAsWord(num: number): string {
+  if (num === 0) {
+    return "";
+  } else if (num === 1) {
+    return "الف";
+  } else if (num === 2) {
+    return "الفان";
+  } else {
+    return `${getPartAsWord(num)} ألاف`;
+  }
+}
+function getHundredsPartAsWord(num: number): string {
+  if (num === 0) {
+    return "";
+  } else {
+    return getPartAsWord(num);
+  }
+}
+
+function getPartAsWord(num: number, delimiter = " و "): string {
   if (num >= 0 && num < 10) {
     return getSingularWord(num);
   } else if (num >= 10 && num < 99) {
     return getTensWord(num);
   } else if (num >= 100 && num < 1000) {
     let hundreds = Number(num.toString()[0]);
-    let tens = Number(num % 100);
+    let tens = Number(num.toString().slice(1, 3));
+    console.log(tens);
+
     let word = "";
     if (hundreds > 0) {
-      word = ` ${getHundredsWord(hundreds)} `;
+      word = `${getHundredsWord(hundreds)}`;
     }
     if (tens > 0) {
-      word += `${delimiter} ${getTensWord(tens)} `;
+      word += `${delimiter}${getTensWord(tens)}`;
     }
     return word;
   }
+  return "";
 }
-function getTensWord(num: number, delimiter: string = "و"): string {
+function getTensWord(num: number, delimiter = " و "): string {
   if (num >= 1 && num < 10) {
     return getSingularWord(num);
   } else if (num >= 10 && num < 12) {
@@ -44,14 +180,17 @@ function getTensWord(num: number, delimiter: string = "و"): string {
       case 12:
         return "اثنا عشر";
     }
-  } else if (num >= 13 && num < 19) {
+  } else if (num >= 13 && num < 20) {
     const secondDigit = Number(num.toString()[1]);
     return `${getSingularWord(secondDigit)} عشر`;
-  } else if (num >= 13 && num < 99) {
+  } else if (num >= 20 && num < 100) {
     let word = "";
     const firstDigit = Number(num.toString()[1]);
     const secondDigit = Number(num.toString()[0]);
-    word = `${getSingularWord(firstDigit)} ${delimiter}`;
+    if (firstDigit != 0) {
+      word = `${getSingularWord(firstDigit)}${delimiter}`;
+    }
+
     switch (secondDigit) {
       case 2:
         word += "عشرون";
@@ -65,7 +204,7 @@ function getTensWord(num: number, delimiter: string = "و"): string {
 }
 function getSingularWord(num: number): string {
   let singularWord = "";
-  switch (Number(num)) {
+  switch (num) {
     case 0:
       singularWord = "صفر";
       break;
@@ -102,7 +241,7 @@ function getSingularWord(num: number): string {
 
 function getHundredsWord(num: number): string {
   let hundredsWord = "";
-  switch (Number(num)) {
+  switch (num) {
     case 0:
       hundredsWord = "";
       break;
