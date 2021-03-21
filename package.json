@@ -1,16 +1,17 @@
 {
-  "name": "numbers_to_words",
-  "version": "1.0.0",
-  "description": "convert english numbers to arabic words",
+  "name": "number-to-arabic",
+  "version": "1.0.1",
+  "description": "convert numbers to arabic words",
   "main": "index.js",
   "scripts": {
-    "test": "tsc & node index.js"
+    "run": "tsc & node index.js"
   },
   "keywords": [
     "arabic",
     "numbers",
     "convert_numbers_to_arabic_words"
   ],
+  "homepage": "https://github.com/mahmoudshahin1111/numbers-to-arabic-words",
   "author": "mahmoudshahin1111@gmail.com",
   "license": "MIT",
   "dependencies": {

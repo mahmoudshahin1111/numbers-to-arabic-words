@@ -1,35 +1,4 @@
 "use strict";
-// import * as fs from "fs-extra";
-// fs.writeFileSync("output.txt", "");
-// const testCase = [
-//   123,
-//   1123,
-//   1000000,
-//   999,
-//   5689492285,
-//   999999999999999,
-//   200,
-//   851,
-//   8011,
-//   8012,
-//   8013,
-//   8020,
-//   1053,
-//   502,
-//   569,
-//   214,
-//   300,
-//   501,
-//   991,
-//   989,
-//   1000,
-//   998,
-//   999,
-// ];
-// testCase.forEach((number) => {
-//   const word = toArabicWord(number);
-//   fs.appendFileSync("output.txt", word + "\n");
-// });
 function toArabicWord(num, delimiter = " و ") {
     try {
         if (num >= 1000) {
