@@ -1,10 +1,12 @@
 # Numbers To Arabic Words
 
-Just only one function 
+Just only one function
+
 ```
 toArabicWord(1000)
 ```
-[overview]
-- easy 
-- fast
-convert number to arabic words 
+
++ Why you can use this tool ?
+because it
+- easy.
+- fast.
