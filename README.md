@@ -7,6 +7,4 @@ toArabicWord(1000)
 ```
 
 + Why you can use this tool ?
-because it
-- easy.
-- fast.
+ - because it easy and fast.
