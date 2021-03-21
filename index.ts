@@ -1,95 +1,65 @@
-import * as fs from "fs-extra";
-
-fs.writeFileSync("output.txt", "");
-const testCase = [
-  123,
-  1123,
-  1000000,
-  999,
-  5689492285,
-  999999999999999,
-  200,
-  851,
-  8011,
-  8012,
-  8013,
-  8020,
-  1053,
-  502,
-  569,
-  214,
-  300,
-  501,
-  991,
-  989,
-  1000,
-  998,
-  999,
-];
-testCase.forEach((number) => {
-  const word = toArabicWord(number);
-  fs.appendFileSync("output.txt", word + "\n");
-});
-
 function toArabicWord(num: number, delimiter = " و ") {
-  //TODO:  join parts with delimiter
-  //TODO: set part title as ألف and stuff like that.
-  if (num >= 1000) {
-    let numChars: string[] = num.toString().split("").reverse();
-    let parts: number[] = [];
-    for (let i = 0; i < numChars.length; i += 3) {
-      let part: string[] = [];
-      for (let j = i; j < i + 3; j++) {
-        part.push(numChars[j]);
+  try {
+    if (num >= 1000) {
+      let numChars: string[] = num.toString().split("").reverse();
+      let parts: number[] = [];
+      for (let i = 0; i < numChars.length; i += 3) {
+        let part: string[] = [];
+        for (let j = i; j < i + 3; j++) {
+          part.push(numChars[j]);
+        }
+
+        parts.push(Number(part.reverse().join("")));
       }
 
-      parts.push(Number(part.reverse().join("")));
-    }
-    console.log(parts);
-    let word = "";
-    if (parts[4] != null) {
-      const numWord = `${getTrillionPartAsWord(parts[4])}`;
-      if (word != "" && numWord != "") {
-        word += `${delimiter}${numWord}`;
-      } else {
-        word += numWord;
+      let word = "";
+      // make possibilities for larger numbers
+      if (parts[4] != null) {
+        const numWord = `${getTrillionPartAsWord(parts[4])}`;
+        if (word != "" && numWord != "") {
+          word += `${delimiter}${numWord}`;
+        } else {
+          word += numWord;
+        }
       }
-    }
-    if (parts[3] != null) {
-      const numWord = `${getBillionsPartAsWord(parts[3])}`;
-      if (word != "" && numWord != "") {
-        word += `${delimiter}${numWord}`;
-      } else {
-        word += numWord;
+      if (parts[3] != null) {
+        const numWord = `${getBillionsPartAsWord(parts[3])}`;
+        if (word != "" && numWord != "") {
+          word += `${delimiter}${numWord}`;
+        } else {
+          word += numWord;
+        }
       }
-    }
-    if (parts[2] != null) {
-      const numWord = `${getMillionsPartAsWord(parts[2])}`;
-      if (word != "" && numWord != "") {
-        word += `${delimiter}${numWord}`;
-      } else {
-        word += numWord;
+      if (parts[2] != null) {
+        const numWord = `${getMillionsPartAsWord(parts[2])}`;
+        if (word != "" && numWord != "") {
+          word += `${delimiter}${numWord}`;
+        } else {
+          word += numWord;
+        }
       }
-    }
-    if (parts[1] != null) {
-      const numWord = `${getThousandPartAsWord(parts[1])}`;
-      if (word != "" && numWord != "") {
-        word += `${delimiter}${numWord}`;
-      } else {
-        word += numWord;
+      if (parts[1] != null) {
+        const numWord = `${getThousandPartAsWord(parts[1])}`;
+        if (word != "" && numWord != "") {
+          word += `${delimiter}${numWord}`;
+        } else {
+          word += numWord;
+        }
       }
-    }
-    if (parts[0] != null) {
-      const numWord = `${getHundredsPartAsWord(parts[0])}`;
-      if (word != "" && numWord != "") {
-        word += `${delimiter}${numWord}`;
-      } else {
-        word += numWord;
+      if (parts[0] != null) {
+        const numWord = `${getHundredsPartAsWord(parts[0])}`;
+        if (word != "" && numWord != "") {
+          word += `${delimiter}${numWord}`;
+        } else {
+          word += numWord;
+        }
       }
+      return word.trim();
+    } else {
+      return getPartAsWord(num);
     }
-    return word.trim();
-  } else {
-    return getPartAsWord(num);
+  } catch (err) {
+    console.log("number is not correct format", err);
   }
 }
 
