@@ -39,7 +39,6 @@ class ArabicWord {
         return partsAsWords.join(this.delimiter);
     }
     splitIntoParts(word) {
-        console.log(word);
         return [word];
     }
     getWordForPart(part) {
@@ -57,7 +56,10 @@ class ArabicWord {
             return n_0Word;
         }
         n_1Word = this.getWordForTens(nGroup_0);
-        return n_0Word + this.delimiter + n_1Word;
+        if (n_0Word) {
+            return n_0Word + this.delimiter + n_1Word;
+        }
+        return n_1Word;
     }
     getWordForHundreds(char) {
         const charNum = Number(char);
@@ -67,9 +69,10 @@ class ArabicWord {
         else if (charNum == 2) {
             return this.getWordForTwoHundred();
         }
-        else {
+        else if (charNum >= 3 && charNum <= 9) {
             return this.getWordFromThreeHundredToNineHundred(char);
         }
+        return null;
     }
     getWordForTwoHundred() {
         const prefix = "ت" + this.nounPrefix;
@@ -169,7 +172,11 @@ let word = arabicWord.processing("869");
 console.log(word);
 word = arabicWord.processing("100");
 console.log(word);
-word = arabicWord.processing("200");
+word = arabicWord.processing("210");
 console.log(word);
 word = arabicWord.processing("102");
+console.log(word);
+word = arabicWord.processing("660600");
+console.log(word);
+word = arabicWord.processing("025");
 console.log(word);
