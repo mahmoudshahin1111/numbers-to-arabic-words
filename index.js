@@ -1,264 +1,175 @@
 "use strict";
-function toArabicWord(num, delimiter = " و ") {
-    try {
-        if (num >= 1000) {
-            let numChars = num.toString().split("").reverse();
-            let parts = [];
-            for (let i = 0; i < numChars.length; i += 3) {
-                let part = [];
-                for (let j = i; j < i + 3; j++) {
-                    part.push(numChars[j]);
-                }
-                parts.push(Number(part.reverse().join("")));
+class ArabicWord {
+    constructor() {
+        this.numbers = {
+            "0": "صفر",
+            "1": "واحد",
+            "2": "اثنان",
+            "3": "ثلاث",
+            "4": "اربع",
+            "5": "خمس",
+            "6": "ست",
+            "7": "سبع",
+            "8": "ثمان",
+            "9": "تسع",
+            "10": "عشر",
+            "11": "احد عشر",
+            "12": "اثنا عشر",
+            "20": "عشرون",
+            "100": "مئه",
+            "1000": "الف",
+            "1000000": "مليون",
+            "1000000000": "مليار",
+            "1000000000000": "بليون",
+            "1000000000000000": "دشليون",
+        };
+        this.tensPrefix = "ون";
+        this.nounPrefix = "ان";
+        this.delimiter = " و ";
+    }
+    processing(num) {
+        const parts = this.splitIntoParts(num);
+        let partsAsWords = [];
+        parts.forEach((p) => {
+            const wP = this.getWordForPart(p);
+            if (wP) {
+                partsAsWords.push(wP);
             }
-            let word = "";
-            // make possibilities for larger numbers
-            if (parts[4] != null) {
-                const numWord = `${getTrillionPartAsWord(parts[4])}`;
-                if (word != "" && numWord != "") {
-                    word += `${delimiter}${numWord}`;
-                }
-                else {
-                    word += numWord;
-                }
-            }
-            if (parts[3] != null) {
-                const numWord = `${getBillionsPartAsWord(parts[3])}`;
-                if (word != "" && numWord != "") {
-                    word += `${delimiter}${numWord}`;
-                }
-                else {
-                    word += numWord;
-                }
-            }
-            if (parts[2] != null) {
-                const numWord = `${getMillionsPartAsWord(parts[2])}`;
-                if (word != "" && numWord != "") {
-                    word += `${delimiter}${numWord}`;
-                }
-                else {
-                    word += numWord;
-                }
-            }
-            if (parts[1] != null) {
-                const numWord = `${getThousandPartAsWord(parts[1])}`;
-                if (word != "" && numWord != "") {
-                    word += `${delimiter}${numWord}`;
-                }
-                else {
-                    word += numWord;
-                }
-            }
-            if (parts[0] != null) {
-                const numWord = `${getHundredsPartAsWord(parts[0])}`;
-                if (word != "" && numWord != "") {
-                    word += `${delimiter}${numWord}`;
-                }
-                else {
-                    word += numWord;
-                }
-            }
-            return word.trim();
+        });
+        return partsAsWords.join(this.delimiter);
+    }
+    splitIntoParts(word) {
+        console.log(word);
+        return [word];
+    }
+    getWordForPart(part) {
+        const n_0 = part[0];
+        const n_1 = part[1];
+        const n_2 = part[2];
+        let n_1Word = null;
+        let n_0Word = null;
+        let nGroup_0 = null;
+        let nGroupNum = null;
+        nGroup_0 = n_1 + n_2;
+        nGroupNum = Number(nGroup_0);
+        n_0Word = this.getWordForHundreds(n_0);
+        if (nGroupNum == 0) {
+            return n_0Word;
+        }
+        n_1Word = this.getWordForTens(nGroup_0);
+        return n_0Word + this.delimiter + n_1Word;
+    }
+    getWordForHundreds(char) {
+        const charNum = Number(char);
+        if (charNum == 1) {
+            return this.getWordForOneHundred();
+        }
+        else if (charNum == 2) {
+            return this.getWordForTwoHundred();
         }
         else {
-            return getPartAsWord(num);
+            return this.getWordFromThreeHundredToNineHundred(char);
         }
     }
-    catch (err) {
-        console.log("number is not correct format", err);
+    getWordForTwoHundred() {
+        const prefix = "ت" + this.nounPrefix;
+        return this.getWordForOneHundred() + prefix;
     }
-}
-function getTrillionPartAsWord(num) {
-    if (num === 0) {
-        return "";
+    getWordForOneHundred() {
+        return this.numbers[100];
     }
-    else if (num === 1) {
-        return "بليون";
+    getWordFromThreeHundredToNineHundred(char) {
+        return this.getWordFromThreeToNine(char) + this.getWordForOneHundred();
     }
-    else if (num === 2) {
-        return "بليونان";
-    }
-    else {
-        return `${getPartAsWord(num)} بليون`;
-    }
-}
-function getBillionsPartAsWord(num) {
-    if (num === 0) {
-        return "";
-    }
-    else if (num === 1) {
-        return "مليار";
-    }
-    else if (num === 2) {
-        return "ملياران";
-    }
-    else {
-        return `${getPartAsWord(num)} مليار`;
-    }
-}
-function getMillionsPartAsWord(num) {
-    if (num === 0) {
-        return "";
-    }
-    else if (num === 1) {
-        return "مليون";
-    }
-    else if (num === 2) {
-        return "مليونان";
-    }
-    else {
-        return `${getPartAsWord(num)} مليون`;
-    }
-}
-function getThousandPartAsWord(num) {
-    if (num === 0) {
-        return "";
-    }
-    else if (num === 1) {
-        return "الف";
-    }
-    else if (num === 2) {
-        return "الفان";
-    }
-    else {
-        return `${getPartAsWord(num)} ألاف`;
-    }
-}
-function getHundredsPartAsWord(num) {
-    if (num === 0) {
-        return "";
-    }
-    else {
-        return getPartAsWord(num);
-    }
-}
-function getPartAsWord(num, delimiter = " و ") {
-    if (num >= 0 && num < 10) {
-        return getSingularWord(num);
-    }
-    else if (num >= 10 && num < 99) {
-        return getTensWord(num);
-    }
-    else if (num >= 100 && num < 1000) {
-        let hundreds = Number(num.toString()[0]);
-        let tens = Number(num.toString().slice(1, 3));
-        console.log(tens);
-        let word = "";
-        if (hundreds > 0) {
-            word = `${getHundredsWord(hundreds)}`;
+    getWordForTens(tensGroup) {
+        const tensNum = Number(tensGroup);
+        const n0 = tensGroup[0];
+        const n1 = tensGroup[1];
+        if (tensNum == 0) {
+            return this.numbers[0];
         }
-        if (tens > 0) {
-            word += `${delimiter}${getTensWord(tens)}`;
+        else if (tensNum >= 1 && tensNum <= 2) {
+            return this.getWordFromOneToTwo(n1);
         }
-        return word;
-    }
-    return "";
-}
-function getTensWord(num, delimiter = " و ") {
-    if (num >= 1 && num < 10) {
-        return getSingularWord(num);
-    }
-    else if (num >= 10 && num < 12) {
-        switch (num) {
-            case 10:
-                return "عشر";
-            case 11:
-                return "احدي عشر";
-            case 12:
-                return "اثنا عشر";
+        else if (tensNum >= 3 && tensNum <= 9) {
+            return this.getWordFromThreeToNine(n1);
         }
-    }
-    else if (num >= 13 && num < 20) {
-        const secondDigit = Number(num.toString()[1]);
-        return `${getSingularWord(secondDigit)} عشر`;
-    }
-    else if (num >= 20 && num < 100) {
-        let word = "";
-        const firstDigit = Number(num.toString()[1]);
-        const secondDigit = Number(num.toString()[0]);
-        if (firstDigit != 0) {
-            word = `${getSingularWord(firstDigit)}${delimiter}`;
+        else if (tensNum === 10) {
+            return this.getWordForTen(tensGroup);
         }
-        switch (secondDigit) {
-            case 2:
-                word += "عشرون";
-                break;
-            default:
-                word += `${getSingularWord(secondDigit)}ون`;
+        else if (tensNum >= 11 && tensNum <= 12) {
+            return this.getWordFromElevenToTwelve(tensGroup);
         }
-        return word;
+        else if (tensNum >= 13 && tensNum <= 19) {
+            return this.getWordFromThirteenToNineTeen(tensGroup);
+        }
+        else if (tensNum >= 20 && tensNum <= 99) {
+            return this.getWordFromTwentyToNinetyNine(tensGroup);
+        }
+        return null;
     }
-    return "";
-}
-function getSingularWord(num) {
-    let singularWord = "";
-    switch (num) {
-        case 0:
-            singularWord = "صفر";
-            break;
-        case 1:
-            singularWord = "واحد";
-            break;
-        case 2:
-            singularWord = "اثنان";
-            break;
-        case 3:
-            singularWord = "ثلاث";
-            break;
-        case 4:
-            singularWord = "اربع";
-            break;
-        case 5:
-            singularWord = "خمس";
-            break;
-        case 6:
-            singularWord = "ست";
-            break;
-        case 7:
-            singularWord = "سبع";
-            break;
-        case 8:
-            singularWord = "ثمان";
-            break;
-        case 9:
-            singularWord = "تسع";
-            break;
+    getWordFromOneToTwo(char) {
+        return this.numbers[char];
     }
-    return singularWord;
-}
-function getHundredsWord(num) {
-    let hundredsWord = "";
-    switch (num) {
-        case 0:
-            hundredsWord = "";
-            break;
-        case 1:
-            hundredsWord = "مائه";
-            break;
-        case 2:
-            hundredsWord = "مائتان";
-            break;
-        case 3:
-            hundredsWord = "ثلاثمائه";
-            break;
-        case 4:
-            hundredsWord = "اربعمائه";
-            break;
-        case 5:
-            hundredsWord = "خمسمائه";
-            break;
-        case 6:
-            hundredsWord = "ستمائه";
-            break;
-        case 7:
-            hundredsWord = "سبعمائه";
-            break;
-        case 8:
-            hundredsWord = "ثمانمائه";
-            break;
-        case 9:
-            hundredsWord = "تسعمائه";
-            break;
+    getWordFromThreeToNine(char) {
+        return this.numbers[char];
     }
-    return hundredsWord;
+    getWordForTen(char) {
+        return this.numbers[char];
+    }
+    getWordFromElevenToTwelve(char) {
+        return this.numbers[char];
+    }
+    getWordFromThirteenToNineTeen(numGroup) {
+        const n0 = numGroup[0];
+        const n1 = numGroup[1];
+        const prefix = this.getWordForTen(numGroup);
+        const n1Word = this.getWordFromThreeToNine(n1);
+        return n1Word + this.delimiter + prefix;
+    }
+    getWordFromTwentyToNinetyNine(tensGroup) {
+        const tensChar = tensGroup[0];
+        const singularChar = tensGroup[1];
+        const tensNum = Number(tensChar);
+        const singularNum = Number(singularChar);
+        let tensWord = null;
+        let singularWord = null;
+        if (tensNum == 2) {
+            tensWord = this.getWordForTwenty();
+        }
+        else if (tensNum >= 3 && tensNum <= 9) {
+            tensWord = this.getWordFromThreeToNine(tensChar) + this.tensPrefix;
+        }
+        if (singularNum == 0) {
+            return tensWord;
+        }
+        else if (tensNum >= 1 && tensNum <= 2) {
+            singularWord = this.getWordFromOneToTwo(singularChar);
+        }
+        else if (tensNum >= 3 && tensNum <= 9) {
+            singularWord = this.getWordFromThreeToNine(singularChar);
+        }
+        else if (tensNum === 10) {
+            singularWord = this.getWordForTen(singularChar);
+        }
+        else if (tensNum >= 11 && tensNum <= 12) {
+            singularWord = this.getWordFromElevenToTwelve(tensGroup);
+        }
+        else if (tensNum >= 13 && tensNum <= 19) {
+            singularWord = this.getWordFromThirteenToNineTeen(tensGroup);
+        }
+        return singularWord + this.delimiter + tensWord;
+    }
+    getWordForTwenty() {
+        return this.numbers[20];
+    }
 }
+const arabicWord = new ArabicWord();
+let word = arabicWord.processing("869");
+console.log(word);
+word = arabicWord.processing("100");
+console.log(word);
+word = arabicWord.processing("200");
+console.log(word);
+word = arabicWord.processing("102");
+console.log(word);
