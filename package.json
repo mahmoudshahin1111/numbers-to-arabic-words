@@ -4,7 +4,8 @@
   "description": "convert numbers to arabic words",
   "main": "index.js",
   "scripts": {
-    "run": "tsc & node index.js"
+    "run": "tsc & node index.js",
+    "test" : "tsc & node index.spec.js"
   },
   "keywords": [
     "arabic",

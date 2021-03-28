@@ -1,1 +1,4 @@
 node_modules
+output.txt
+index.spec.js
+index.spec.ts
