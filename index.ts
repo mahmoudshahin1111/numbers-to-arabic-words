@@ -18,8 +18,6 @@ class ArabicWord {
 
   processing(num: string): string {
     const parts = this.splitIntoParts(num);
-    console.log(parts);
-
     let partsAsWords: string[] = [];
     parts.forEach((p, i) => {
       let wordForPart = null;
