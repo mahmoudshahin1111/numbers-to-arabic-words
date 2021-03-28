@@ -1,4 +1,6 @@
 "use strict";
+var exports = {"__esModule": true};
+exports.toArabicWord = void 0;
 var ArabicWord = /** @class */ (function () {
     function ArabicWord() {
         this.numbers = {
@@ -20,7 +22,6 @@ var ArabicWord = /** @class */ (function () {
     ArabicWord.prototype.processing = function (num) {
         var _this = this;
         var parts = this.splitIntoParts(num);
-        console.log(parts);
         var partsAsWords = [];
         parts.forEach(function (p, i) {
             var wordForPart = null;
@@ -347,3 +348,8 @@ var ArabicWord = /** @class */ (function () {
     };
     return ArabicWord;
 }());
+var arabicWord = new ArabicWord();
+var toArabicWord = function (number) {
+    return arabicWord.processing(number.toString());
+};
+exports.toArabicWord = toArabicWord;

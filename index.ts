@@ -46,7 +46,7 @@ class ArabicWord {
         (word[counter - 2] != null ? word[counter - 2] : "0") +
         (word[counter - 1] != null ? word[counter - 1] : "0") +
         (word[counter] != null ? word[counter] : "0");
-        parts.push(part);
+      parts.push(part);
       if (counter < 0) {
         break;
       }
@@ -318,3 +318,8 @@ class ArabicWord {
     return "عشرون";
   }
 }
+
+const arabicWord = new ArabicWord();
+export const  toArabicWord = function (number: Number): string {
+  return arabicWord.processing(number.toString());
+};
