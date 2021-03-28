@@ -1,10 +1,11 @@
 {
-  "name": "number-to-arabic",
-  "version": "1.0.1",
+  "name": "number-to-arabic-words",
+  "version": "1.0.2",
   "description": "convert numbers to arabic words",
   "main": "index.js",
   "scripts": {
-    "run": "tsc & node index.js"
+    "run": "tsc & node index.js",
+    "test" : "tsc & node index.spec.js"
   },
   "keywords": [
     "arabic",
