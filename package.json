@@ -1,6 +1,6 @@
 {
   "name": "number-to-arabic-words",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
   "main": "index.js",
   "scripts": {
@@ -17,11 +17,12 @@
   "author": "mahmoudshahin1111@gmail.com",
   "license": "MIT",
   "dependencies": {
+
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
     "@types/fs-extra": "^9.0.7",
     "fs": "0.0.1-security",
     "fs-extra": "^9.1.0"
-  },
-  "devDependencies": {
-    "@types/node": "^14.14.31"
   }
 }
