@@ -12,7 +12,6 @@ class ArabicWord {
     "9": "تسع",
   };
   tensPrefix = "ون";
-  nounPrefix = "ان";
   delimiter = " و ";
   constructor() {}
 
@@ -82,10 +81,10 @@ class ArabicWord {
     return "ألف";
   }
   private getWordForTwoThousand() {
-    return "الفان";
+    return "ألفين";
   }
   private getWordFromThreeToTenThousands() {
-    return "ألاف";
+    return "آلاف";
   }
   private getWordForGreaterThanTenThousands() {
     return "ألف";
@@ -300,19 +299,19 @@ class ArabicWord {
     return null;
   }
   private getWordForTwoHundred() {
-    return "مئتان";
+    return "مائتان";
   }
   private getWordForOneHundred() {
-    return "مئه";
+    return "مائة";
   }
   private getWordForTen() {
     return "عشر";
   }
   private getWordForEleven() {
-    return "أحد عشر";
+    return "إحدى عشر";
   }
   private getWordForTwelve() {
-    return "اثنا عشر";
+    return "إثنا عشر";
   }
   private getWordForTwenty() {
     return "عشرون";
@@ -320,6 +319,6 @@ class ArabicWord {
 }
 
 const arabicWord = new ArabicWord();
-export const  toArabicWord = function (number: Number): string {
+export const toArabicWord = function (number: Number): string {
   return arabicWord.processing(number.toString());
 };

@@ -1,5 +1,5 @@
 "use strict";
-var exports = {"__esModule": true};
+const exports = {};
 exports.toArabicWord = void 0;
 var ArabicWord = /** @class */ (function () {
     function ArabicWord() {
@@ -16,7 +16,6 @@ var ArabicWord = /** @class */ (function () {
             "9": "تسع",
         };
         this.tensPrefix = "ون";
-        this.nounPrefix = "ان";
         this.delimiter = " و ";
     }
     ArabicWord.prototype.processing = function (num) {
@@ -92,10 +91,10 @@ var ArabicWord = /** @class */ (function () {
         return "ألف";
     };
     ArabicWord.prototype.getWordForTwoThousand = function () {
-        return "الفان";
+        return "ألفين";
     };
     ArabicWord.prototype.getWordFromThreeToTenThousands = function () {
-        return "ألاف";
+        return "آلاف";
     };
     ArabicWord.prototype.getWordForGreaterThanTenThousands = function () {
         return "ألف";
@@ -329,19 +328,19 @@ var ArabicWord = /** @class */ (function () {
         return null;
     };
     ArabicWord.prototype.getWordForTwoHundred = function () {
-        return "مئتان";
+        return "مائتان";
     };
     ArabicWord.prototype.getWordForOneHundred = function () {
-        return "مئه";
+        return "مائة";
     };
     ArabicWord.prototype.getWordForTen = function () {
         return "عشر";
     };
     ArabicWord.prototype.getWordForEleven = function () {
-        return "أحد عشر";
+        return "إحدى عشر";
     };
     ArabicWord.prototype.getWordForTwelve = function () {
-        return "اثنا عشر";
+        return "إثنا عشر";
     };
     ArabicWord.prototype.getWordForTwenty = function () {
         return "عشرون";
