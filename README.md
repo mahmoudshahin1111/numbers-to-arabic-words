@@ -9,12 +9,12 @@
 
 ---
 
-`toArabicWord(10000)`
+`toArabicWord(100000)`
 مئه ألف
 
 ---
 
-`toArabicWord(100000) `
+`toArabicWord(2000000) `
 مليونان
 
 ---
