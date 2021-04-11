@@ -30,6 +30,9 @@ class ArabicWord {
       const sectionAfterPoint: string[] = this.processSection(sections[1]);
       phases.push(sectionAfterPoint.reverse().join(this.delimiter));
     }
+    if (phases.length === 1) {
+      return phases[0];
+    }
     return phases.join(" فاصل ");
   }
   private processSection(section: string) {
