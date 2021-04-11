@@ -1,7 +1,7 @@
 # Numbers To Arabic Words
 ---
 
-![Like That 👌](https://photos.app.goo.gl/zyedE8HqAdXFcFZo8)
+![Like That 👌](https://lh3.googleusercontent.com/pw/ACtC-3csUySSi5X3aOZ3cjYuwuDX1oUrxYUEJij3Bh-1AmMm2jlZBsu5tGoDjlvsTyubMJZHTZAKjK8iNBQm-UQacJef8GEcCDRtfLF0C5DRty8iLfhVKY7oAzCAoNZ4jqpcf88nG6KmNhkj-hrEqMLiiw2K=w1670-h693-no?authuser=0)
 
 ## Just only one function do this magic 👌
 `toArabicWord(1000)`
