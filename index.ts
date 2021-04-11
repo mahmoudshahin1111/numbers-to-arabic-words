@@ -344,6 +344,6 @@ class ArabicWord {
 }
 
 const arabicWord = new ArabicWord();
-export const toArabicWord = function (number: Number): string {
+const toArabicWord = function (number: Number): string {
   return arabicWord.processing(number.toString());
 };

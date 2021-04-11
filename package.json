@@ -1,6 +1,6 @@
 {
   "name": "number-to-arabic-words",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
   "main": "index.js",
   "scripts": {

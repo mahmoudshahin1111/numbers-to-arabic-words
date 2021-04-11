@@ -1,7 +1,4 @@
 "use strict";
-var exports = {};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.toArabicWord = void 0;
 class ArabicWord {
     constructor() {
         this.numbers = {
@@ -375,4 +372,3 @@ const arabicWord = new ArabicWord();
 const toArabicWord = function (number) {
     return arabicWord.processing(number.toString());
 };
-exports.toArabicWord = toArabicWord;
