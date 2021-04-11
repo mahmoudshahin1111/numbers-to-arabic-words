@@ -13,7 +13,7 @@ class ArabicWord {
   };
   tensPrefix = "ون";
   delimiter = " و ";
-  constructor() {}
+  constructor() { }
 
   processing(num: string): string {
     // split word parts by dots to 2 sections

@@ -1,6 +1,6 @@
 # Numbers To Arabic Words
 ---
-## Just only one function
+## Just only one function do this magic 🤓
 `toArabicWord(1000)`
 ألف
 ---
@@ -20,17 +20,17 @@
 مائتان فاصل ثلاث و عشرون
 ---
 `toArabicWord(1.00)`
-مائتان فاصل ثلاث و عشرون
+واحد
 ---
 `toArabicWord(100.9568)`
 مائة فاصل تسع آلاف و خمسمائة و ثمان و ستون
 ---
-`toArabicWord(100.65)`
+`toArabicWord(100.52)`
 مائه فاصل أثنان و خمسون
 ---
 - Why you can use this tool ? 
  + because it easy and fast.
- + support points like that 100.65
+ + support points like that 100.52
 
 Please Let me know about bug and suggestion to fix it . 
 Thank you  😍🚀💖 ..
