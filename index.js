@@ -1,8 +1,10 @@
 "use strict";
-const exports = {};
+
+var exports = {};
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.toArabicWord = void 0;
-var ArabicWord = /** @class */ (function () {
-    function ArabicWord() {
+class ArabicWord {
+    constructor() {
         this.numbers = {
             "0": "صفر",
             "1": "واحد",
@@ -18,38 +20,57 @@ var ArabicWord = /** @class */ (function () {
         this.tensPrefix = "ون";
         this.delimiter = " و ";
     }
-    ArabicWord.prototype.processing = function (num) {
-        var _this = this;
-        var parts = this.splitIntoParts(num);
-        var partsAsWords = [];
-        parts.forEach(function (p, i) {
-            var wordForPart = null;
+    processing(num) {
+        // split word parts by dots to 2 sections
+        // process every section without dependant on each other.
+        const sections = this.splitIntoSections(num);
+        let sectionBeforePoint = [];
+        let sectionAfterPoint = [];
+        let phases = [];
+        if (sections[0] != null && sections[0] != undefined) {
+            const sectionBeforePoint = this.processSection(sections[0]);
+            phases.push(sectionBeforePoint.reverse().join(this.delimiter));
+        }
+        if (sections[1] != null && sections[1] != undefined) {
+            const sectionAfterPoint = this.processSection(sections[1]);
+            phases.push(sectionAfterPoint.reverse().join(this.delimiter));
+        }
+        return phases.join(" فاصل ");
+    }
+    processSection(section) {
+        const parts = this.splitIntoParts(section);
+        let partsAsWords = [];
+        parts.forEach((p, i) => {
+            let wordForPart = null;
             if (i === 0) {
-                wordForPart = _this.getWordForHundredsPart(p);
+                wordForPart = this.getWordForHundredsPart(p);
             }
             else if (i === 1) {
-                wordForPart = _this.getWordForThousandsPart(p);
+                wordForPart = this.getWordForThousandsPart(p);
             }
             else if (i === 2) {
-                wordForPart = _this.getWordForMillionsPart(p);
+                wordForPart = this.getWordForMillionsPart(p);
             }
             else if (i === 3) {
-                wordForPart = _this.getWordForBillionsPart(p);
+                wordForPart = this.getWordForBillionsPart(p);
             }
             else if (i === 4) {
-                wordForPart = _this.getWordForTrillionsPart(p);
+                wordForPart = this.getWordForTrillionsPart(p);
             }
             if (wordForPart) {
                 partsAsWords.push(wordForPart);
             }
         });
-        return partsAsWords.reverse().join(this.delimiter);
-    };
-    ArabicWord.prototype.splitIntoParts = function (word) {
-        var parts = [];
-        var counter = word.length - 1;
+        return partsAsWords;
+    }
+    splitIntoSections(num) {
+        return num.split(".", 2);
+    }
+    splitIntoParts(word) {
+        const parts = [];
+        let counter = word.length - 1;
         while (true) {
-            var part = (word[counter - 2] != null ? word[counter - 2] : "0") +
+            let part = (word[counter - 2] != null ? word[counter - 2] : "0") +
                 (word[counter - 1] != null ? word[counter - 1] : "0") +
                 (word[counter] != null ? word[counter] : "0");
             parts.push(part);
@@ -59,14 +80,14 @@ var ArabicWord = /** @class */ (function () {
             counter -= 3;
         }
         return parts;
-    };
-    ArabicWord.prototype.getWordForHundredsPart = function (part) {
-        var partWord = this.getWordForPart(part);
+    }
+    getWordForHundredsPart(part) {
+        let partWord = this.getWordForPart(part);
         return partWord;
-    };
-    ArabicWord.prototype.getWordForThousandsPart = function (part) {
-        var partAsNumber = Number(part);
-        var word = null;
+    }
+    getWordForThousandsPart(part) {
+        const partAsNumber = Number(part);
+        let word = null;
         if (partAsNumber == 0) {
             word = null;
         }
@@ -86,23 +107,23 @@ var ArabicWord = /** @class */ (function () {
             }
         }
         return word;
-    };
-    ArabicWord.prototype.getWordForThousand = function () {
+    }
+    getWordForThousand() {
         return "ألف";
-    };
-    ArabicWord.prototype.getWordForTwoThousand = function () {
+    }
+    getWordForTwoThousand() {
         return "ألفين";
-    };
-    ArabicWord.prototype.getWordFromThreeToTenThousands = function () {
+    }
+    getWordFromThreeToTenThousands() {
         return "آلاف";
-    };
-    ArabicWord.prototype.getWordForGreaterThanTenThousands = function () {
+    }
+    getWordForGreaterThanTenThousands() {
         return "ألف";
-    };
+    }
     // Millions
-    ArabicWord.prototype.getWordForMillionsPart = function (part) {
-        var partAsNumber = Number(part);
-        var word = null;
+    getWordForMillionsPart(part) {
+        const partAsNumber = Number(part);
+        let word = null;
         if (partAsNumber == 0) {
             word = null;
         }
@@ -113,7 +134,7 @@ var ArabicWord = /** @class */ (function () {
             word = this.getWordForTwoMillion();
         }
         else {
-            var partWord = this.getWordForPart(part) + " ";
+            let partWord = this.getWordForPart(part) + " ";
             if (partAsNumber >= 3 && partAsNumber <= 10) {
                 word = partWord += this.getWordFromThreeToTenMillions();
             }
@@ -122,24 +143,24 @@ var ArabicWord = /** @class */ (function () {
             }
         }
         return word;
-    };
-    ArabicWord.prototype.getWordForMillion = function () {
+    }
+    getWordForMillion() {
         return "مليون";
-    };
-    ArabicWord.prototype.getWordForTwoMillion = function () {
+    }
+    getWordForTwoMillion() {
         return "مليونان";
-    };
-    ArabicWord.prototype.getWordFromThreeToTenMillions = function () {
+    }
+    getWordFromThreeToTenMillions() {
         return "ملاين";
-    };
-    ArabicWord.prototype.getWordForGreaterThanTenMillions = function () {
+    }
+    getWordForGreaterThanTenMillions() {
         return "مليون";
-    };
+    }
     //
     // Billions
-    ArabicWord.prototype.getWordForBillionsPart = function (part) {
-        var partAsNumber = Number(part);
-        var word = null;
+    getWordForBillionsPart(part) {
+        const partAsNumber = Number(part);
+        let word = null;
         if (partAsNumber == 0) {
             word = null;
         }
@@ -150,7 +171,7 @@ var ArabicWord = /** @class */ (function () {
             word = this.getWordForTwoBillion();
         }
         else {
-            var partWord = this.getWordForPart(part) + " ";
+            let partWord = this.getWordForPart(part) + " ";
             if (partAsNumber >= 3 && partAsNumber <= 10) {
                 word = partWord += this.getWordFromThreeToTenBillions();
             }
@@ -159,24 +180,24 @@ var ArabicWord = /** @class */ (function () {
             }
         }
         return word;
-    };
-    ArabicWord.prototype.getWordForBillion = function () {
+    }
+    getWordForBillion() {
         return "مليار";
-    };
-    ArabicWord.prototype.getWordForTwoBillion = function () {
+    }
+    getWordForTwoBillion() {
         return "ملياران";
-    };
-    ArabicWord.prototype.getWordFromThreeToTenBillions = function () {
+    }
+    getWordFromThreeToTenBillions() {
         return "مليارات";
-    };
-    ArabicWord.prototype.getWordForGreaterThanTenBillions = function () {
+    }
+    getWordForGreaterThanTenBillions() {
         return "مليار";
-    };
+    }
     //
     // Trillions
-    ArabicWord.prototype.getWordForTrillionsPart = function (part) {
-        var partAsNumber = Number(part);
-        var word = null;
+    getWordForTrillionsPart(part) {
+        const partAsNumber = Number(part);
+        let word = null;
         if (partAsNumber == 0) {
             word = null;
         }
@@ -187,7 +208,7 @@ var ArabicWord = /** @class */ (function () {
             word = this.getWordForTwoTrillion();
         }
         else {
-            var partWord = this.getWordForPart(part) + " ";
+            let partWord = this.getWordForPart(part) + " ";
             if (partAsNumber >= 3 && partAsNumber <= 10) {
                 word = partWord += this.getWordFromThreeToTenTrillions();
             }
@@ -196,28 +217,28 @@ var ArabicWord = /** @class */ (function () {
             }
         }
         return word;
-    };
-    ArabicWord.prototype.getWordForTrillion = function () {
+    }
+    getWordForTrillion() {
         return "تليار";
-    };
-    ArabicWord.prototype.getWordForTwoTrillion = function () {
+    }
+    getWordForTwoTrillion() {
         return "تلياران";
-    };
-    ArabicWord.prototype.getWordFromThreeToTenTrillions = function () {
+    }
+    getWordFromThreeToTenTrillions() {
         return "تليارات";
-    };
-    ArabicWord.prototype.getWordForGreaterThanTenTrillions = function () {
+    }
+    getWordForGreaterThanTenTrillions() {
         return "تليار";
-    };
+    }
     //
-    ArabicWord.prototype.getWordForPart = function (part) {
-        var n_0 = part[0];
-        var n_1 = part[1];
-        var n_2 = part[2];
-        var n_1Word = null;
-        var n_0Word = null;
-        var nGroup_0 = null;
-        var nGroupNum = null;
+    getWordForPart(part) {
+        const n_0 = part[0];
+        const n_1 = part[1];
+        const n_2 = part[2];
+        let n_1Word = null;
+        let n_0Word = null;
+        let nGroup_0 = null;
+        let nGroupNum = null;
         nGroup_0 = n_1 + n_2;
         nGroupNum = Number(nGroup_0);
         n_0Word = this.getWordForHundreds(n_0);
@@ -229,10 +250,10 @@ var ArabicWord = /** @class */ (function () {
             return n_0Word + this.delimiter + n_1Word;
         }
         return n_1Word;
-    };
-    ArabicWord.prototype.getWordForHundreds = function (char) {
-        var charNum = Number(char);
-        var word = null;
+    }
+    getWordForHundreds(char) {
+        const charNum = Number(char);
+        let word = null;
         if (charNum == 1) {
             word = this.getWordForOneHundred();
         }
@@ -243,14 +264,14 @@ var ArabicWord = /** @class */ (function () {
             word = this.getWordFromThreeHundredToNineHundred(char);
         }
         return word;
-    };
-    ArabicWord.prototype.getWordFromThreeHundredToNineHundred = function (char) {
+    }
+    getWordFromThreeHundredToNineHundred(char) {
         return this.getWordFromThreeToNine(char) + this.getWordForOneHundred();
-    };
-    ArabicWord.prototype.getWordForTens = function (tensGroup) {
-        var tensNum = Number(tensGroup);
-        var n0 = tensGroup[0];
-        var n1 = tensGroup[1];
+    }
+    getWordForTens(tensGroup) {
+        const tensNum = Number(tensGroup);
+        const n0 = tensGroup[0];
+        const n1 = tensGroup[1];
         if (tensNum == 0) {
             return this.numbers[0];
         }
@@ -273,25 +294,25 @@ var ArabicWord = /** @class */ (function () {
             return this.getWordFromTwentyToNinetyNine(tensGroup);
         }
         return null;
-    };
-    ArabicWord.prototype.getWordFromOneToTwo = function (char) {
+    }
+    getWordFromOneToTwo(char) {
         return this.numbers[char];
-    };
-    ArabicWord.prototype.getWordFromThreeToNine = function (char) {
+    }
+    getWordFromThreeToNine(char) {
         return this.numbers[char];
-    };
-    ArabicWord.prototype.getWordFromThirteenToNineTeen = function (numGroup) {
-        var prefix = this.getWordForTen();
-        var n1Word = this.getWordFromThreeToNine(numGroup[1]);
+    }
+    getWordFromThirteenToNineTeen(numGroup) {
+        const prefix = this.getWordForTen();
+        const n1Word = this.getWordFromThreeToNine(numGroup[1]);
         return n1Word + " " + prefix;
-    };
-    ArabicWord.prototype.getWordFromTwentyToNinetyNine = function (tensGroup) {
-        var tensChar = tensGroup[0];
-        var singularChar = tensGroup[1];
-        var tensNum = Number(tensChar);
-        var singularNum = Number(singularChar);
-        var tensWord = null;
-        var singularWord = null;
+    }
+    getWordFromTwentyToNinetyNine(tensGroup) {
+        const tensChar = tensGroup[0];
+        const singularChar = tensGroup[1];
+        const tensNum = Number(tensChar);
+        const singularNum = Number(singularChar);
+        let tensWord = null;
+        let singularWord = null;
         if (tensNum == 2) {
             tensWord = this.getWordForTwenty();
         }
@@ -317,8 +338,8 @@ var ArabicWord = /** @class */ (function () {
             singularWord = this.getWordFromThirteenToNineTeen(tensGroup);
         }
         return singularWord + this.delimiter + tensWord;
-    };
-    ArabicWord.prototype.getWordFromElevenToTwelve = function (char) {
+    }
+    getWordFromElevenToTwelve(char) {
         if (char === "11") {
             return this.getWordForEleven();
         }
@@ -326,29 +347,28 @@ var ArabicWord = /** @class */ (function () {
             return this.getWordForTwelve();
         }
         return null;
-    };
-    ArabicWord.prototype.getWordForTwoHundred = function () {
+    }
+    getWordForTwoHundred() {
         return "مائتان";
-    };
-    ArabicWord.prototype.getWordForOneHundred = function () {
+    }
+    getWordForOneHundred() {
         return "مائة";
-    };
-    ArabicWord.prototype.getWordForTen = function () {
+    }
+    getWordForTen() {
         return "عشر";
-    };
-    ArabicWord.prototype.getWordForEleven = function () {
+    }
+    getWordForEleven() {
         return "إحدى عشر";
-    };
-    ArabicWord.prototype.getWordForTwelve = function () {
+    }
+    getWordForTwelve() {
         return "إثنا عشر";
-    };
-    ArabicWord.prototype.getWordForTwenty = function () {
+    }
+    getWordForTwenty() {
         return "عشرون";
-    };
-    return ArabicWord;
-}());
-var arabicWord = new ArabicWord();
-var toArabicWord = function (number) {
+    }
+}
+const arabicWord = new ArabicWord();
+const toArabicWord = function (number) {
     return arabicWord.processing(number.toString());
 };
 exports.toArabicWord = toArabicWord;

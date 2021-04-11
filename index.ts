@@ -16,7 +16,24 @@ class ArabicWord {
   constructor() {}
 
   processing(num: string): string {
-    const parts = this.splitIntoParts(num);
+    // split word parts by dots to 2 sections
+    // process every section without dependant on each other.
+    const sections: string[] = this.splitIntoSections(num);
+    let sectionBeforePoint: string[] = [];
+    let sectionAfterPoint: string[] = [];
+    let phases: string[] = [];
+    if (sections[0] != null && sections[0] != undefined) {
+      const sectionBeforePoint: string[] = this.processSection(sections[0]);
+      phases.push(sectionBeforePoint.reverse().join(this.delimiter));
+    }
+    if (sections[1] != null && sections[1] != undefined) {
+      const sectionAfterPoint: string[] = this.processSection(sections[1]);
+      phases.push(sectionAfterPoint.reverse().join(this.delimiter));
+    }
+    return phases.join(" فاصل ");
+  }
+  private processSection(section: string) {
+    const parts = this.splitIntoParts(section);
     let partsAsWords: string[] = [];
     parts.forEach((p, i) => {
       let wordForPart = null;
@@ -35,7 +52,10 @@ class ArabicWord {
         partsAsWords.push(wordForPart);
       }
     });
-    return partsAsWords.reverse().join(this.delimiter);
+    return partsAsWords;
+  }
+  private splitIntoSections(num: string): string[] {
+    return num.split(".", 2);
   }
   private splitIntoParts(word: string): string[] {
     const parts: string[] = [];

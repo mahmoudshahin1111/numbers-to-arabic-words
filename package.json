@@ -1,11 +1,11 @@
 {
   "name": "number-to-arabic-words",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
   "main": "index.js",
   "scripts": {
     "run": "tsc & node index.js",
-    "test" : "tsc & node index.spec.js"
+    "test": "tsc & node index.spec.js"
   },
   "keywords": [
     "arabic",
@@ -17,12 +17,14 @@
   "author": "mahmoudshahin1111@gmail.com",
   "license": "MIT",
   "dependencies": {
-
+    "@types/jquery": "^3.5.5",
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
     "@types/fs-extra": "^9.0.7",
+    "@types/node": "^14.14.31",
     "fs": "0.0.1-security",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^9.1.0",
+    "imports-loader": "^2.0.0"
   }
 }
