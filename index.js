@@ -18,6 +18,7 @@ class ArabicWord {
         };
         this.tensPrefix = "ون";
         this.delimiter = " و ";
+        this.sectionsDelimiter = " فاصل ";
     }
     processing(num) {
         // split word parts by dots to 2 sections
@@ -27,17 +28,18 @@ class ArabicWord {
         let sectionAfterPoint = [];
         let phases = [];
         if (sections[0] != null && sections[0] != undefined) {
-            const sectionBeforePoint = this.processSection(sections[0]);
-            phases.push(sectionBeforePoint.reverse().join(this.delimiter));
+            sectionBeforePoint = this.processSection(sections[0]);
+            if (sectionBeforePoint.length > 0) {
+                phases.push(sectionBeforePoint.reverse().join(this.delimiter));
+            }
         }
         if (sections[1] != null && sections[1] != undefined) {
-            const sectionAfterPoint = this.processSection(sections[1]);
-            phases.push(sectionAfterPoint.reverse().join(this.delimiter));
+            sectionAfterPoint = this.processSection(sections[1]);
+            if (sectionAfterPoint.length > 0) {
+                phases.push(sectionAfterPoint.reverse().join(this.delimiter));
+            }
         }
-        if (phases.length === 1) {
-            return phases[0];
-        }
-        return phases.join(" فاصل ");
+        return phases.join(this.sectionsDelimiter);
     }
     processSection(section) {
         const parts = this.splitIntoParts(section);
