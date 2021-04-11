@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Number To Arabic Word Converter</title>
-  </head>
-  <body>
-  
-    <script src="./index.js"></script>
-    <script>
-      console.log(toArabicWord (999999999999999));
-      console.log(toArabicWord (5000.65));
-      console.log(toArabicWord (200.23));
-      console.log(toArabicWord (100.00));
-      console.log(toArabicWord (100.35));
-      console.log(toArabicWord(100.9568));
-      console.log(toArabicWord(102030));
-    </script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Number To Arabic Word Converter</title>
+</head>
+
+<body>
+  <h1 id="" data-taw>1515151.98</h1>
+  <h1 id="" data-taw>100.00</h1>
+  <h1 id="" data-taw>5600.26</h1>
+  <h1 id="" data-taw>859.100</h1>
+  <script src="./index.js"></script>
+  <script>
+    document.querySelectorAll("[data-taw]").forEach(e => {
+      console.log(e);
+      e.textContent = toArabicWord(e.textContent);
+    })
+  </script>
+</body>
+
 </html>
