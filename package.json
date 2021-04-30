@@ -1,6 +1,6 @@
 {
   "name": "number-to-arabic-words",
-  "version": "1.2.5",
+  "version": "1.3.0",
   "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,11 @@
     "test": "jest"
   },
   "keywords": [
+    "تحويل الارقام لحروف",
     "arabic",
     "numbers",
-    "convert_numbers_to_arabic_words"
+    "convert_numbers_to_arabic_words",
+    "n2words","convert","number","word","text","عربي"
   ],
   "type": "commonjs",
   "homepage": "https://github.com/mahmoudshahin1111/numbers-to-arabic-words",
