@@ -10,13 +10,13 @@
 ألف
 
 `toArabicWord(100000)`
-مئه ألف
+مائه ألف
 
 `toArabicWord(2000000) `
 مليونان
 
 `toArabicWord(102030)`
-مئه و اثنان ألف و ثلاثون
+مائه و أثنان ألف و ثلاثون
 
 `toArabicWord(5000.65)`
 خمس آلاف فاصل خمس و ستون
@@ -37,6 +37,8 @@ Why you can use this tool ?
 
 - because it easy and fast.
 - support points like that 100.52
+- UnitTests
 
 Please Let me know about bug and suggestion to fix it .
 Thank you 😍🚀💖 ..
+

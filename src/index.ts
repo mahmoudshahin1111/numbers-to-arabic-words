@@ -2,9 +2,9 @@ class ArabicWord {
   numbers: { [key: string]: string } = {
     "0": "صفر",
     "1": "واحد",
-    "2": "اثنان",
+    "2": "أثنان",
     "3": "ثلاث",
-    "4": "اربع",
+    "4": "أربع",
     "5": "خمس",
     "6": "ست",
     "7": "سبع",
@@ -347,3 +347,4 @@ const arabicWord = new ArabicWord();
 const toArabicWord = function (number: Number): string {
   return arabicWord.processing(number.toString());
 };
+
