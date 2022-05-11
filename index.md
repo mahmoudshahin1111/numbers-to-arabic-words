@@ -1,37 +1,42 @@
-## Welcome to GitHub Pages
+# Numbers To Arabic Words
 
-You can use the [editor on GitHub](https://github.com/mahmoudshahin1111/numbers-to-arabic-words/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+---
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+![Like That 👌](https://lh3.googleusercontent.com/pw/ACtC-3csUySSi5X3aOZ3cjYuwuDX1oUrxYUEJij3Bh-1AmMm2jlZBsu5tGoDjlvsTyubMJZHTZAKjK8iNBQm-UQacJef8GEcCDRtfLF0C5DRty8iLfhVKY7oAzCAoNZ4jqpcf88nG6KmNhkj-hrEqMLiiw2K=w1670-h693-no?authuser=0)
 
-### Markdown
+## Just only one function do this magic 👌
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+`toArabicWord(1000)`
+ألف
 
-```markdown
-Syntax highlighted code block
+`toArabicWord(100000)`
+مائه ألف
 
-# Header 1
-## Header 2
-### Header 3
+`toArabicWord(2000000) `
+مليونان
 
-- Bulleted
-- List
+`toArabicWord(102030)`
+مائه و أثنان ألف و ثلاثون
 
-1. Numbered
-2. List
+`toArabicWord(5000.65)`
+خمس آلاف فاصل خمس و ستون
 
-**Bold** and _Italic_ and `Code` text
+`toArabicWord(200.23)`
+مائتان فاصل ثلاث و عشرون
 
-[Link](url) and ![Image](src)
-```
+`toArabicWord(1.00)`
+واحد
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+`toArabicWord(100.9568)`
+مائة فاصل تسع آلاف و خمسمائة و ثمان و ستون
 
-### Jekyll Themes
+`toArabicWord(100.52)`
+مائه فاصل أثنان و خمسون
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/mahmoudshahin1111/numbers-to-arabic-words/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Why you can use this tool ?
 
-### Support or Contact
+- because it easy and fast.
+- support points like that 100.52
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Please Let me know about bug and suggestion to fix it .
+Thank you 😍🚀💖 ..
