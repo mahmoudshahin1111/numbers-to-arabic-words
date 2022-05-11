@@ -6,7 +6,8 @@
     "strict": true,
     "declaration": false,
     "outDir": "dist",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports":true
     // "sourceMap": true
   },
   "include": ["src/**/*"],
