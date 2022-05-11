@@ -5,3 +5,5 @@ index.spec.ts
 index.html
 dist
 dist/*
+.vscode
+.vscode/*
