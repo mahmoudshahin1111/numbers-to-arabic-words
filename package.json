@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "run": "tsc & node index.js",
-    "build": "tsc",
+    "build": "webpack",
     "test": "jest"
   },
   "keywords": [
