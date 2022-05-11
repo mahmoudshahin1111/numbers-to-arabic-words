@@ -348,3 +348,5 @@ const toArabicWord = function (number: Number): string {
   return arabicWord.processing(number.toString());
 };
 
+export default toArabicWord;
+
