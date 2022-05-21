@@ -1,8 +1,10 @@
-import {toArabicWord} from "./index";
+import { arabicWord, toArabicWord } from "./index";
 import "jest";
+import { Config } from "./types";
 
 describe("Testing To Arabic Word Module", () => {
   test("should translate numbers to arabic", () => {
+    const newArabicWordObject = arabicWord.create();
     const mockNumbers = [
       {
         num: 100,
@@ -41,6 +43,10 @@ describe("Testing To Arabic Word Module", () => {
         translated: "واحد",
       },
       {
+        num: 2.1,
+        translated: "أثنان فاصل واحد",
+      },
+      {
         num: 100.9568,
         translated: "مائة فاصل تسع آلاف و خمسمائة و ثمان و ستون",
       },
@@ -57,10 +63,55 @@ describe("Testing To Arabic Word Module", () => {
         num: 100000000000000,
         translated: "مائة تليار",
       },
+      // {
+      //   num: 1000000000000000000,
+      //   translated: "مائة تليار",
+      // },
     ];
 
     for (const mockNumber of mockNumbers) {
-      expect(toArabicWord(mockNumber.num)).toBe(mockNumber.translated);
+      expect(newArabicWordObject.process(mockNumber.num)).toBe(mockNumber.translated);
+    }
+  });
+
+  it("should be able to change the delimiter", () => {
+    const newArabicWordObject = arabicWord.create();
+    const config: Config = {
+      delimiter: "and",
+    };
+    newArabicWordObject.setConfig(config);
+    const units = [
+      {
+        num: 100,
+        result: "مائة",
+      },
+      {
+        num: 100.11,
+        result: "مائة and إحدى عشر",
+      },
+    ];
+    for (const unit of units) {
+      const result = newArabicWordObject.process(unit.num);
+      expect(result).toBe(unit.result);
+    }
+  });
+  it("should be able to got the result in json type", () => {
+    const newArabicWordObject = arabicWord.create();
+    newArabicWordObject.setConfig({
+      strict: true,
+    });
+    const units = [
+      {
+        num: 100.50,
+        result: {
+          base: "مائة",
+          delimiter: "فاصل",
+          reminder: "خمس",
+        },
+      },
+    ];
+    for (const unit of units) {
+      expect(unit.result).toEqual(newArabicWordObject.process(unit.num));
     }
   });
 });

@@ -1,69 +1,19 @@
 import _ from "lodash";
+import { Config, ProcessResult } from "./types";
 
-interface Config {
-  sectionDelimiter?: {
-    value?: string;
-    asHtml?: boolean;
-    customClass?: string;
-  };
-  asHtml?: boolean;
-  customClass?: string;
-}
-
-class ArabicWordConfig {
+export class ArabicWordConfig {
   private config: Config = {
-    sectionDelimiter: {
-      value: "فاصل",
-    },
+    delimiter: "فاصل",
   };
   overrideConfig(config: Config): void {
-    this.config = Object.assign(config);
+    this.config = Object.assign(this.config, config);
   }
   getAll() {
     return this.config;
   }
 }
 
-class Phase {
-  sections: string[] = [];
-  constructor(private arabicWordConfig: ArabicWordConfig) {}
-  join() {
-    let connectedPhase: string = "";
-    this.sections.forEach((section, i) => {
-      connectedPhase += section;
-      if (i !== this.sections.length - 1) {
-        connectedPhase += this.arabicWordConfig.getAll().sectionDelimiter.asHtml
-          ? ` ${this.convertToHtml(
-              this.arabicWordConfig.getAll().sectionDelimiter.value,
-              this.arabicWordConfig.getAll().sectionDelimiter.customClass
-            )} `
-          : ` ${this.arabicWordConfig.getAll().sectionDelimiter.value} `;
-      }
-    });
-
-    return this.arabicWordConfig.getAll().asHtml
-      ? this.convertToHtml(
-          connectedPhase,
-          this.arabicWordConfig.getAll().customClass
-        )
-      : connectedPhase;
-  }
-  convertToHtml(section: string, customClass?: string): string {
-    let result = "";
-    const elAttribute: { [key: string]: string } = {};
-    customClass ? elAttribute.class = customClass : null;
-    result = `<span ${Object.keys(elAttribute).map(
-      (elAKey) => ` ${elAKey}="${elAttribute[elAKey]}" `
-    )}>${section}`;
-    result += "</span>";
-    return result;
-  }
-  reset() {
-    this.sections = [];
-  }
-}
-
-class ArabicWord {
+export class NumberSection {
   numbers: { [key: string]: string } = {
     "0": "صفر",
     "1": "واحد",
@@ -75,47 +25,35 @@ class ArabicWord {
     "7": "سبع",
     "8": "ثمان",
     "9": "تسع",
+    "10": "عشر",
+    "11": "إحدى عشر",
+    "12": "إثنا عشر",
+    "20": "عشرون",
+    "100": "مائة",
+    "200": "مائتان",
+    "1e3": "ألف",
+    "2e3": "ألفين",
+    "3e3-1e4": "آلاف",
+    "1e4+": "ألف",
+    "1e6": "مليون",
+    "2e6": "مليونان",
+    "3e6-1e7": "ملاين",
+    "1e7+": "مليون",
+    "1e9": "مليار",
+    "2e9": "ملياران",
+    "3e9-1e10": "مليارات",
+    "1e10+": "مليار",
+    "1e12": "تليار",
+    "2e12": "تلياران",
+    "3e12-1e13": "تليارات",
+    "1e13+": "تليار",
   };
   tensPrefix = "ون";
   delimiter = " و ";
-  private config: ArabicWordConfig = new ArabicWordConfig();
-  private phase: Phase;
-  constructor(config?: Config) {
-    if (config) {
-      this.setConfig(config);
-    }
-    this.phase = new Phase(this.config);
+  constructor(private arabicWordConfig: ArabicWordConfig) {}
+  process(num: string) {
+    return this.processSection(num).reverse();
   }
-  setConfig(config: Config) {
-    this.config.overrideConfig(config);
-    return this;
-  }
-  processing(num: string): string {
-    // split word parts by dots to 2 sections
-    // process every section without dependant on each other.
-    const sections: string[] = this.splitIntoSections(num);
-    let sectionBeforePoint: string[] = [];
-    let sectionAfterPoint: string[] = [];
-    this.phase.reset();
-    if (sections[0] != null && sections[0] != undefined) {
-      sectionBeforePoint = this.processSection(sections[0]);
-      if (sectionBeforePoint.length > 0) {
-        this.phase.sections.push(
-          sectionBeforePoint.reverse().join(this.delimiter)
-        );
-      }
-    }
-    if (sections[1] != null && sections[1] != undefined) {
-      sectionAfterPoint = this.processSection(sections[1]);
-      if (sectionAfterPoint.length > 0) {
-        this.phase.sections.push(
-          sectionAfterPoint.reverse().join(this.delimiter)
-        );
-      }
-    }
-    return this.phase.join();
-  }
-
   private processSection(section: string) {
     const parts = this.splitIntoParts(section);
     let partsAsWords: string[] = [];
@@ -422,7 +360,72 @@ class ArabicWord {
   }
 }
 
+export class ArabicWord {
+  private config: ArabicWordConfig = new ArabicWordConfig();
+  private numberSection: NumberSection = new NumberSection(this.config);
+  private delimiter = "و";
+  constructor(config?: Config) {
+    if (config) {
+      this.setConfig(config);
+    }
+  }
+  /**
+   * override the library config for example the delimiter and the result type
+   * @param config {Config}
+   * @returns
+   */
+  setConfig(config: Config) {
+    this.config.overrideConfig(config);
+    return this;
+  }
+  /**
+   *
+   * @param num {number} transform the number to arabic words
+   * @returns
+   */
+  process(num: number): string | ProcessResult {
+    const sections: string[] = this.splitIntoSections(num);
+    if (this.config.getAll().strict) {
+      const result: ProcessResult = {} as any;
+
+      if (!!sections[0]) {
+        result.base = this.numberSection
+          .process(sections[0])
+          .join(` ${this.delimiter} `);
+      }
+      if (!!sections[1]) {
+        result.delimiter = this.config.getAll().delimiter;
+        result.reminder = this.numberSection
+          .process(sections[1])
+          .join(` ${this.delimiter} `);
+      }
+      return result;
+    } else {
+      const resultInStringSections = [];
+      if (!!sections[0]) {
+        const leftSide = this.numberSection.process(sections[0]);
+        resultInStringSections.push(leftSide.join(` ${this.delimiter} `));
+      }
+      if (!!sections[1]) {
+        const rightSide = this.numberSection.process(sections[1]);
+        resultInStringSections.push(rightSide.join(` ${this.delimiter} `));
+      }
+      return resultInStringSections.join(` ${this.config.getAll().delimiter} `);
+    }
+  }
+  /**
+   * create new object
+   * @returns {ArabicWord}
+   */
+  create() {
+    return new ArabicWord();
+  }
+  private splitIntoSections(num: number): string[] {
+    return num.toString().split(".");
+  }
+}
+
 export const arabicWord = new ArabicWord();
-export function toArabicWord(number: Number): string {
-  return arabicWord.processing(number.toString());
+export function toArabicWord(number: number): string | ProcessResult {
+  return arabicWord.process(number);
 }
