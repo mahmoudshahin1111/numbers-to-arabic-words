@@ -4,6 +4,8 @@ import { Config, ProcessResult } from "./types";
 export class ArabicWordConfig {
   private config: Config = {
     delimiter: "فاصل",
+    numberSectionsDelimiter:'و',
+    tensPrefix:"ون"
   };
   overrideConfig(config: Config): void {
     this.config = Object.assign(this.config, config);
@@ -48,8 +50,6 @@ export class NumberSection {
     "3e12-1e13": "تليارات",
     "1e13+": "تليار",
   };
-  tensPrefix = "ون";
-  delimiter = " و ";
   constructor(private arabicWordConfig: ArabicWordConfig) {}
   process(num: string) {
     return this.processSection(num).reverse();
@@ -63,21 +63,14 @@ export class NumberSection {
         wordForPart = this.getWordForHundredsPart(p);
       } else if (i === 1) {
         wordForPart = this.getWordForThousandsPart(p);
-      } else if (i === 2) {
-        wordForPart = this.getWordForMillionsPart(p);
-      } else if (i === 3) {
-        wordForPart = this.getWordForBillionsPart(p);
-      } else if (i === 4) {
-        wordForPart = this.getWordForTrillionsPart(p);
+      } else if (i >= 2 && i<= 4) {
+        wordForPart =  this.getWordByNumberSectionIndex(p,i);
       }
       if (wordForPart) {
         partsAsWords.push(wordForPart);
       }
     });
     return partsAsWords;
-  }
-  private splitIntoSections(num: string): string[] {
-    return num.split(".", 2);
   }
   private splitIntoParts(word: string): string[] {
     const parts: string[] = [];
@@ -132,110 +125,28 @@ export class NumberSection {
     return "ألف";
   }
 
-  // Millions
-
-  private getWordForMillionsPart(part: string): string | null {
+ 
+  private getWordByNumberSectionIndex(part: string,numberSectionIndex:number): string | null {
     const partAsNumber = Number(part);
     let word = null;
     if (partAsNumber == 0) {
       word = null;
     } else if (partAsNumber == 1) {
-      word = this.getWordForMillion();
+      word = this.numbers[`1e${(numberSectionIndex*3)}`];
     } else if (partAsNumber == 2) {
-      word = this.getWordForTwoMillion();
+      word = this.numbers[`2e${(numberSectionIndex*3)}`];
     } else {
       let partWord = this.getWordForPart(part) + " ";
       if (partAsNumber >= 3 && partAsNumber <= 10) {
-        word = partWord += this.getWordFromThreeToTenMillions();
+        word = partWord += this.numbers[`3e${numberSectionIndex*3}-1e${(numberSectionIndex*3)+1}`];
       } else if (partAsNumber >= 11) {
-        word = partWord += this.getWordForGreaterThanTenMillions();
+        word = partWord += this.numbers[`1e${(numberSectionIndex*3)+1}+`];
       }
     }
     return word;
   }
-  private getWordForMillion() {
-    return "مليون";
-  }
-  private getWordForTwoMillion() {
-    return "مليونان";
-  }
-  private getWordFromThreeToTenMillions() {
-    return "ملاين";
-  }
-  private getWordForGreaterThanTenMillions() {
-    return "مليون";
-  }
-  //
 
-  // Billions
 
-  private getWordForBillionsPart(part: string): string | null {
-    const partAsNumber = Number(part);
-    let word = null;
-    if (partAsNumber == 0) {
-      word = null;
-    } else if (partAsNumber == 1) {
-      word = this.getWordForBillion();
-    } else if (partAsNumber == 2) {
-      word = this.getWordForTwoBillion();
-    } else {
-      let partWord = this.getWordForPart(part) + " ";
-      if (partAsNumber >= 3 && partAsNumber <= 10) {
-        word = partWord += this.getWordFromThreeToTenBillions();
-      } else if (partAsNumber >= 11) {
-        word = partWord += this.getWordForGreaterThanTenBillions();
-      }
-    }
-    return word;
-  }
-  private getWordForBillion() {
-    return "مليار";
-  }
-  private getWordForTwoBillion() {
-    return "ملياران";
-  }
-  private getWordFromThreeToTenBillions() {
-    return "مليارات";
-  }
-  private getWordForGreaterThanTenBillions() {
-    return "مليار";
-  }
-  //
-
-  // Trillions
-
-  private getWordForTrillionsPart(part: string): string | null {
-    const partAsNumber = Number(part);
-    let word = null;
-    if (partAsNumber == 0) {
-      word = null;
-    } else if (partAsNumber == 1) {
-      word = this.getWordForTrillion();
-    } else if (partAsNumber == 2) {
-      word = this.getWordForTwoTrillion();
-    } else {
-      let partWord = this.getWordForPart(part) + " ";
-      if (partAsNumber >= 3 && partAsNumber <= 10) {
-        word = partWord += this.getWordFromThreeToTenTrillions();
-      } else if (partAsNumber >= 11) {
-        word = partWord += this.getWordForGreaterThanTenTrillions();
-      }
-    }
-    return word;
-  }
-  private getWordForTrillion() {
-    return "تليار";
-  }
-  private getWordForTwoTrillion() {
-    return "تلياران";
-  }
-  private getWordFromThreeToTenTrillions() {
-    return "تليارات";
-  }
-  private getWordForGreaterThanTenTrillions() {
-    return "تليار";
-  }
-  //
   private getWordForPart(part: string): string | null {
     const n_0 = part[0];
     const n_1 = part[1];
@@ -252,7 +163,7 @@ export class NumberSection {
     }
     n_1Word = this.getWordForTens(nGroup_0);
     if (n_0Word) {
-      return n_0Word + this.delimiter + n_1Word;
+      return n_0Word + this.arabicWordConfig.getAll().numberSectionsDelimiter + n_1Word;
     }
     return n_1Word;
   }
@@ -315,7 +226,7 @@ export class NumberSection {
     if (tensNum == 2) {
       tensWord = this.getWordForTwenty();
     } else if (tensNum >= 3 && tensNum <= 9) {
-      tensWord = this.getWordFromThreeToNine(tensChar) + this.tensPrefix;
+      tensWord = this.getWordFromThreeToNine(tensChar) + this.arabicWordConfig.getAll().tensPrefix;
     }
     if (singularNum == 0) {
       return tensWord;
@@ -330,7 +241,7 @@ export class NumberSection {
     } else if (tensNum >= 13 && tensNum <= 19) {
       singularWord = this.getWordFromThirteenToNineTeen(tensGroup);
     }
-    return singularWord + this.delimiter + tensWord;
+    return singularWord + this.arabicWordConfig.getAll().numberSectionsDelimiter + tensWord;
   }
   private getWordFromElevenToTwelve(char: string): string | null {
     if (char === "11") {
