@@ -273,10 +273,6 @@ export class ArabicWord {
       return resultInStringSections.join(` ${this.config.getAll().delimiter} `);
     }
   }
-  /**
-   * create new object
-   * @returns {ArabicWord}
-   */
   create() {
     return new ArabicWord();
   }
