@@ -4,8 +4,8 @@ import { Config, ProcessResult } from "./types";
 export class ArabicWordConfig {
   private config: Config = {
     delimiter: "فاصل",
-    numberSectionsDelimiter:'و',
-    tensPrefix:"ون"
+    numberSectionsDelimiter: "و",
+    tensPrefix: "ون",
   };
   overrideConfig(config: Config): void {
     this.config = Object.assign(this.config, config);
@@ -61,10 +61,8 @@ export class NumberSection {
       let wordForPart = null;
       if (i === 0) {
         wordForPart = this.getWordForHundredsPart(p);
-      } else if (i === 1) {
-        wordForPart = this.getWordForThousandsPart(p);
-      } else if (i >= 2 && i<= 4) {
-        wordForPart =  this.getWordByNumberSectionIndex(p,i);
+      } else {
+        wordForPart = this.getWordByNumberSectionIndex(p, i);
       }
       if (wordForPart) {
         partsAsWords.push(wordForPart);
@@ -93,59 +91,31 @@ export class NumberSection {
     let partWord = this.getWordForPart(part);
     return partWord;
   }
-  private getWordForThousandsPart(part: string): string | null {
+  private getWordByNumberSectionIndex(
+    part: string,
+    numberSectionIndex: number
+  ): string | null {
     const partAsNumber = Number(part);
     let word = null;
     if (partAsNumber == 0) {
       word = null;
     } else if (partAsNumber == 1) {
-      word = this.getWordForThousand();
+      word = this.numbers[`1e${numberSectionIndex * 3}`];
     } else if (partAsNumber == 2) {
-      word = this.getWordForTwoThousand();
-    } else {
-      word = this.getWordForPart(part) + " ";
-      if (partAsNumber >= 3 && partAsNumber <= 10) {
-        word += this.getWordFromThreeToTenThousands();
-      } else if (partAsNumber >= 11) {
-        word += this.getWordForGreaterThanTenThousands();
-      }
-    }
-    return word;
-  }
-  private getWordForThousand() {
-    return "ألف";
-  }
-  private getWordForTwoThousand() {
-    return "ألفين";
-  }
-  private getWordFromThreeToTenThousands() {
-    return "آلاف";
-  }
-  private getWordForGreaterThanTenThousands() {
-    return "ألف";
-  }
-
- 
-  private getWordByNumberSectionIndex(part: string,numberSectionIndex:number): string | null {
-    const partAsNumber = Number(part);
-    let word = null;
-    if (partAsNumber == 0) {
-      word = null;
-    } else if (partAsNumber == 1) {
-      word = this.numbers[`1e${(numberSectionIndex*3)}`];
-    } else if (partAsNumber == 2) {
-      word = this.numbers[`2e${(numberSectionIndex*3)}`];
+      word = this.numbers[`2e${numberSectionIndex * 3}`];
     } else {
       let partWord = this.getWordForPart(part) + " ";
       if (partAsNumber >= 3 && partAsNumber <= 10) {
-        word = partWord += this.numbers[`3e${numberSectionIndex*3}-1e${(numberSectionIndex*3)+1}`];
+        word = partWord +=
+          this.numbers[
+            `3e${numberSectionIndex * 3}-1e${numberSectionIndex * 3 + 1}`
+          ];
       } else if (partAsNumber >= 11) {
-        word = partWord += this.numbers[`1e${(numberSectionIndex*3)+1}+`];
+        word = partWord += this.numbers[`1e${numberSectionIndex * 3 + 1}+`];
       }
     }
     return word;
   }
-
 
   private getWordForPart(part: string): string | null {
     const n_0 = part[0];
@@ -163,7 +133,11 @@ export class NumberSection {
     }
     n_1Word = this.getWordForTens(nGroup_0);
     if (n_0Word) {
-      return n_0Word + this.arabicWordConfig.getAll().numberSectionsDelimiter + n_1Word;
+      return (
+        n_0Word +
+        (" " + this.arabicWordConfig.getAll().numberSectionsDelimiter + " ") +
+        n_1Word
+      );
     }
     return n_1Word;
   }
@@ -171,9 +145,9 @@ export class NumberSection {
     const charNum = Number(char);
     let word = null;
     if (charNum == 1) {
-      word = this.getWordForOneHundred();
+      word = this.numbers[100];
     } else if (charNum == 2) {
-      word = this.getWordForTwoHundred();
+      word = this.numbers[200];
     } else if (charNum >= 3 && charNum <= 9) {
       word = this.getWordFromThreeHundredToNineHundred(char);
     }
@@ -181,7 +155,7 @@ export class NumberSection {
   }
 
   private getWordFromThreeHundredToNineHundred(char: string) {
-    return this.getWordFromThreeToNine(char) + this.getWordForOneHundred();
+    return this.numbers[char] + this.numbers[100];
   }
   private getWordForTens(tensGroup: string): string | null {
     const tensNum = Number(tensGroup);
@@ -190,13 +164,13 @@ export class NumberSection {
     if (tensNum == 0) {
       return this.numbers[0];
     } else if (tensNum >= 1 && tensNum <= 2) {
-      return this.getWordFromOneToTwo(n1);
+      return this.numbers[n1];
     } else if (tensNum >= 3 && tensNum <= 9) {
-      return this.getWordFromThreeToNine(n1);
+      return this.numbers[n1];
     } else if (tensNum === 10) {
-      return this.getWordForTen();
+      return this.numbers[tensNum];
     } else if (tensNum >= 11 && tensNum <= 12) {
-      return this.getWordFromElevenToTwelve(tensGroup);
+      return this.numbers[tensGroup];
     } else if (tensNum >= 13 && tensNum <= 19) {
       return this.getWordFromThirteenToNineTeen(tensGroup);
     } else if (tensNum >= 20 && tensNum <= 99) {
@@ -204,16 +178,10 @@ export class NumberSection {
     }
     return null;
   }
-  private getWordFromOneToTwo(char: string): string {
-    return this.numbers[char];
-  }
-  private getWordFromThreeToNine(char: string) {
-    return this.numbers[char];
-  }
 
   private getWordFromThirteenToNineTeen(numGroup: string) {
-    const prefix = this.getWordForTen();
-    const n1Word = this.getWordFromThreeToNine(numGroup[1]);
+    const prefix = this.numbers[10];
+    const n1Word = this.numbers[numGroup[1]];
     return n1Word + " " + prefix;
   }
   private getWordFromTwentyToNinetyNine(tensGroup: string) {
@@ -224,50 +192,31 @@ export class NumberSection {
     let tensWord = null;
     let singularWord = null;
     if (tensNum == 2) {
-      tensWord = this.getWordForTwenty();
+      tensWord = this.numbers[20];
     } else if (tensNum >= 3 && tensNum <= 9) {
-      tensWord = this.getWordFromThreeToNine(tensChar) + this.arabicWordConfig.getAll().tensPrefix;
+      tensWord =
+        this.numbers[tensChar] + this.arabicWordConfig.getAll().tensPrefix;
     }
     if (singularNum == 0) {
       return tensWord;
     } else if (tensNum >= 1 && tensNum <= 2) {
-      singularWord = this.getWordFromOneToTwo(singularChar);
+      singularWord = this.numbers[singularChar];
     } else if (tensNum >= 3 && tensNum <= 9) {
-      singularWord = this.getWordFromThreeToNine(singularChar);
+      singularWord = this.numbers[singularChar];
     } else if (tensNum === 10) {
-      singularWord = this.getWordForTen();
+      singularWord = this.numbers[tensNum];
     } else if (tensNum >= 11 && tensNum <= 12) {
-      singularWord = this.getWordFromElevenToTwelve(tensGroup);
+      singularWord = this.numbers[tensGroup];
     } else if (tensNum >= 13 && tensNum <= 19) {
       singularWord = this.getWordFromThirteenToNineTeen(tensGroup);
     }
-    return singularWord + this.arabicWordConfig.getAll().numberSectionsDelimiter + tensWord;
-  }
-  private getWordFromElevenToTwelve(char: string): string | null {
-    if (char === "11") {
-      return this.getWordForEleven();
-    } else if (char === "12") {
-      return this.getWordForTwelve();
-    }
-    return null;
-  }
-  private getWordForTwoHundred() {
-    return "مائتان";
-  }
-  private getWordForOneHundred() {
-    return "مائة";
-  }
-  private getWordForTen() {
-    return "عشر";
-  }
-  private getWordForEleven() {
-    return "إحدى عشر";
-  }
-  private getWordForTwelve() {
-    return "إثنا عشر";
-  }
-  private getWordForTwenty() {
-    return "عشرون";
+    return (
+      singularWord +
+      (singularWord
+        ? " " + this.arabicWordConfig.getAll().numberSectionsDelimiter + " "
+        : "") +
+      tensWord
+    );
   }
 }
 
