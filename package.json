@@ -37,7 +37,10 @@
   "homepage": "https://github.com/mahmoudshahin1111/numbers-to-arabic-words",
   "author": "mahmoudshahin1111@gmail.com",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@types/lodash": "^4.14.182",
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",
