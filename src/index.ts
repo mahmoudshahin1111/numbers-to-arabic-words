@@ -159,18 +159,10 @@ export class NumberSection {
   }
   private getWordForTens(tensGroup: string): string | null {
     const tensNum = Number(tensGroup);
-    const n0 = tensGroup[0];
-    const n1 = tensGroup[1];
     if (tensNum == 0) {
       return this.numbers[0];
-    } else if (tensNum >= 1 && tensNum <= 2) {
-      return this.numbers[n1];
-    } else if (tensNum >= 3 && tensNum <= 9) {
-      return this.numbers[n1];
-    } else if (tensNum === 10) {
+    } else if (tensNum >= 1 && tensNum <= 12) {
       return this.numbers[tensNum];
-    } else if (tensNum >= 11 && tensNum <= 12) {
-      return this.numbers[tensGroup];
     } else if (tensNum >= 13 && tensNum <= 19) {
       return this.getWordFromThirteenToNineTeen(tensGroup);
     } else if (tensNum >= 20 && tensNum <= 99) {
@@ -180,9 +172,7 @@ export class NumberSection {
   }
 
   private getWordFromThirteenToNineTeen(numGroup: string) {
-    const prefix = this.numbers[10];
-    const n1Word = this.numbers[numGroup[1]];
-    return n1Word + " " + prefix;
+    return this.numbers[numGroup[1]] + " " + this.numbers[10];
   }
   private getWordFromTwentyToNinetyNine(tensGroup: string) {
     const tensChar = tensGroup[0];
