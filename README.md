@@ -8,7 +8,10 @@
 ![Like That 👌](https://lh3.googleusercontent.com/pw/ACtC-3csUySSi5X3aOZ3cjYuwuDX1oUrxYUEJij3Bh-1AmMm2jlZBsu5tGoDjlvsTyubMJZHTZAKjK8iNBQm-UQacJef8GEcCDRtfLF0C5DRty8iLfhVKY7oAzCAoNZ4jqpcf88nG6KmNhkj-hrEqMLiiw2K=w1670-h693-no?authuser=0)
 
 ## Why i Need to use it ?
-
+- Easy installation
+```html 
+    <script src="https://cdn.jsdelivr.net/npm/number-to-arabic-words@latest/dist/index.js"></script>
+ ``` 
 - Based on Arabic number rules [Arabic Numbers Rules](https://www.fluentarabic.net/numbers-in-arabic/) المعجم 
 - Support points like that 100.52 
 - Can customized 🎒💻
