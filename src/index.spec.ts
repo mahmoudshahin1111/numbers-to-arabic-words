@@ -77,7 +77,7 @@ describe("Testing To Arabic Word Module", () => {
   it("should be able to change the delimiter", () => {
     const newArabicWordObject = arabicWord.create();
     const config: Config = {
-      delimiter: "and",
+      delimiter: "/",
     };
     newArabicWordObject.setConfig(config);
     const units = [
@@ -87,7 +87,7 @@ describe("Testing To Arabic Word Module", () => {
       },
       {
         num: 100.11,
-        result: "مائة and إحدى عشر",
+        result: "مائة / إحدى عشر",
       },
     ];
     for (const unit of units) {
