@@ -6,8 +6,7 @@
   "scripts": {
     "run": "tsc & node index.js",
     "build": "npx webpack && cp package.json dist/package.json",
-    "test": "npx jest",
-    "deploy":"npm patch && npm publish"
+    "test": "npx jest"
   },
   "keywords": [
     "تحويل الارقام لحروف",
