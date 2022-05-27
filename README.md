@@ -8,15 +8,18 @@
 ![Like That 👌](https://lh3.googleusercontent.com/pw/ACtC-3csUySSi5X3aOZ3cjYuwuDX1oUrxYUEJij3Bh-1AmMm2jlZBsu5tGoDjlvsTyubMJZHTZAKjK8iNBQm-UQacJef8GEcCDRtfLF0C5DRty8iLfhVKY7oAzCAoNZ4jqpcf88nG6KmNhkj-hrEqMLiiw2K=w1670-h693-no?authuser=0)
 
 ## Why i Need to use it ?
+
 - Easy installation
-```html 
-    <script src="https://cdn.jsdelivr.net/npm/number-to-arabic-words@latest/dist/index.js"></script>
- ``` 
-- Based on Arabic number rules [Arabic Numbers Rules](https://www.fluentarabic.net/numbers-in-arabic/) المعجم 
-- Support points like that 100.52 
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/number-to-arabic-words@latest/dist/index.js"></script>
+```
+
+- Based on Arabic number rules [Arabic Numbers Rules](https://www.fluentarabic.net/numbers-in-arabic/) المعجم
+- Support points like that 100.52
 - Can customized 🎒💻
 - Support unlimited number length more than 999999999999
-- Passed all the unit tests 
+- Passed all the unit tests
 - Just only one function `toArabicWord(1000)` do this magic 👌
 
   | Number                   | Result                                     |
@@ -33,21 +36,22 @@
 
 ## Advanced
 
-- You can change the config by using the global object `arabicWord` as example .. 
+- You can change the config by using the global object `arabicWord` as example ..
+
 ```javascript
-  arabicWord.setConfig({
-    delimiter:'/',
-    strict:true
-  })
+arabicWord.setConfig({
+  delimiter: "/",
+  strict: true,
+});
 ```
+
 #### All the options
-|| Option  | Type | Description |
-|---| --- | --- |--- |
-|1| delimiter  | string  | you can change instead of "فاصل" to be anything else|
-|2| strict  | boolean  | get the result as Json |
-|3| numberSectionsDelimiter  | string  | change "و" to be anything else |
 
-
+|     | Option                  | Type    | Description                                          |
+| --- | ----------------------- | ------- | ---------------------------------------------------- |
+| 1   | delimiter               | string  | you can change instead of "فاصل" to be anything else |
+| 2   | strict                  | boolean | get the result as Json                               |
+| 3   | numberSectionsDelimiter | string  | change "و" to be anything else                       |
 
 ## More
 
