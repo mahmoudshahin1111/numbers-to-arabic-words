@@ -5,9 +5,18 @@ export class ArabicWordConfig {
   private config: Config = {
     delimiter: "فاصل",
     numberSectionsDelimiter: "و",
-    tensPrefix: "ون",
+    get tensPrefix(){
+      return "ون";
+    }, // readonly
   };
   overrideConfig(config: Config): void {
+    delete config.tensPrefix;
+    if(config.delimiter){
+      config.delimiter = config.delimiter.replace(' ','');
+    }
+    if(config.numberSectionsDelimiter){
+      config.numberSectionsDelimiter = config.numberSectionsDelimiter.replace(' ','');
+    }
     this.config = Object.assign(this.config, config);
   }
   getAll() {
@@ -58,18 +67,19 @@ export class NumberSection {
     const parts = this.splitIntoParts(section);
     let partsAsWords: string[] = [];
     parts.forEach((p, i) => {
-      let wordForPart = null;
-      if (i === 0) {
-        wordForPart = this.getWordForHundredsPart(p);
-      } else {
-        wordForPart = this.getWordByNumberSectionIndex(p, i);
-      }
-      if (wordForPart) {
+      let wordForPart = this.getWordByNumberSectionIndex(p, i);
+      if (!!wordForPart) {
         partsAsWords.push(wordForPart);
       }
     });
     return partsAsWords;
   }
+  /**
+   * convert the number to parts every part has 3 numbers for example
+   * 10 to be 010 and 12345 to be 012345
+   * @param word the number in string
+   * @returns 
+   */
   private splitIntoParts(word: string): string[] {
     const parts: string[] = [];
     let counter = word.length - 1;
@@ -87,18 +97,15 @@ export class NumberSection {
 
     return parts;
   }
-  private getWordForHundredsPart(part: string): string | null {
-    let partWord = this.getWordForPart(part);
-    return partWord;
-  }
+
   private getWordByNumberSectionIndex(
     part: string,
     numberSectionIndex: number
   ): string | null {
     const partAsNumber = Number(part);
     let word = null;
-    if (partAsNumber == 0) {
-      word = null;
+    if (numberSectionIndex == 0) {
+      word = this.getWordForPart(part);
     } else if (partAsNumber == 1) {
       word = this.numbers[`1e${numberSectionIndex * 3}`];
     } else if (partAsNumber == 2) {
@@ -121,17 +128,13 @@ export class NumberSection {
     const n_0 = part[0];
     const n_1 = part[1];
     const n_2 = part[2];
-    let n_1Word = null;
-    let n_0Word = null;
-    let nGroup_0 = null;
-    let nGroupNum = null;
-    nGroup_0 = n_1 + n_2;
-    nGroupNum = Number(nGroup_0);
-    n_0Word = this.getWordForHundreds(n_0);
+    const n_0Word = this.getWordForHundreds(n_0);
+    const nGroup_0 = n_1 + n_2;
+    const nGroupNum = Number(nGroup_0);
+    const n_1Word = this.getWordForTens(nGroup_0);
     if (nGroupNum == 0) {
       return n_0Word;
     }
-    n_1Word = this.getWordForTens(nGroup_0);
     if (n_0Word) {
       return (
         n_0Word +
@@ -189,11 +192,9 @@ export class NumberSection {
     }
     if (singularNum == 0) {
       return tensWord;
-    } else if (tensNum >= 1 && tensNum <= 2) {
+    } else if (tensNum >= 1 && tensNum <= 9) {
       singularWord = this.numbers[singularChar];
-    } else if (tensNum >= 3 && tensNum <= 9) {
-      singularWord = this.numbers[singularChar];
-    } else if (tensNum === 10) {
+    }else if (tensNum === 10) {
       singularWord = this.numbers[tensNum];
     } else if (tensNum >= 11 && tensNum <= 12) {
       singularWord = this.numbers[tensGroup];

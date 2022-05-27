@@ -30,6 +30,20 @@
 
 ## Advanced
 
+- You can change the config by using the global object `arabicWord` as example .. 
+```javascript
+  arabicWord.setConfig({
+    delimiter:'/',
+    strict:true
+  })
+```
+#### All the options
+|| Option  | Type | Description |
+|---| --- | --- |--- |
+|1| delimiter  | string  | you can change instead of "فاصل" to be anything else|
+|2| strict  | boolean  | get the result as Json |
+|3| numberSectionsDelimiter  | string  | change "و" to be anything else |
+
 
 
 ## More

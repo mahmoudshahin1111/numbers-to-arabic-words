@@ -1,7 +1,7 @@
 node_modules
 output.txt
 index.html
-dist
-dist/*
+dist/index.html
+dist/package.json
 .vscode
 .vscode/*
