@@ -18,7 +18,7 @@
 - Based on Arabic number rules [Arabic Numbers Rules](https://www.fluentarabic.net/numbers-in-arabic/) المعجم
 - Support points like that 100.52
 - Can customized 🎒💻
-- Support unlimited number length more than 999999999999
+- Support unlimited number length more than 100000000000000000000 "كوادرليون" 😲
 - Passed all the unit tests
 - Just only one function `toArabicWord(1000)` do this magic 👌
 
