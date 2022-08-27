@@ -13,7 +13,7 @@ function execute() {
     //     JSON.stringify(packageJson)
     // )
     // execSync(`prettier ${path.join(__dirname, '../', 'package.json')} --write`);
-    execSync('npm publish');
+    // execSync('npm publish');
     console.log('Deployed')
 }
 
