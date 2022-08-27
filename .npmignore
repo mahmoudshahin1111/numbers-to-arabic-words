@@ -3,5 +3,5 @@
 node_modules
 src
 .gitignore
-dist/index.html
 scripts
+examples

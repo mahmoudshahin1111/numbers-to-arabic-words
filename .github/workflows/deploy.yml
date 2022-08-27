@@ -2,7 +2,7 @@ name: deploy
 on:
     push:
         branches:
-            - 'build-scripts'
+            - "build-scripts"
 jobs:
     test:
         runs-on: ubuntu-latest
@@ -10,8 +10,7 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                  node-version: '14'
+                  node-version: "14"
             - run: npm i
             - run: npm i -g prettier
             - run: npm run-script deploy
-            - run: ls -l
