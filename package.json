@@ -3,10 +3,12 @@
   "version": "1.4.4",
   "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
   "main": "index.js",
+  "buildPath":"dist",
   "scripts": {
     "run": "tsc & node index.js",
-    "build": "npx webpack && cp package.json dist/package.json",
-    "test": "npx jest"
+    "build": "node scripts/build.js",
+    "deploy": "npm run build && node scripts/deploy.js",
+    "test": "node scripts/test.js"
   },
   "keywords": [
     "تحويل الارقام لحروف",
@@ -36,10 +38,7 @@
   "homepage": "https://github.com/mahmoudshahin1111/numbers-to-arabic-words",
   "author": "mahmoudshahin1111@gmail.com",
   "license": "MIT",
-  "dependencies": {
-    "@types/lodash": "^4.14.182",
-    "lodash": "^4.17.21"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",

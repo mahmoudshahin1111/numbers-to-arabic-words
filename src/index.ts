@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { Config, ProcessResult } from "./types";
 
 export class ArabicWordConfig {
