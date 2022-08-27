@@ -1,0 +1,7 @@
+.github
+.vscode
+node_modules
+src
+.gitignore
+scripts
+examples
