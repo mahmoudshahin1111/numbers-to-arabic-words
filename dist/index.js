@@ -1,3 +1,9 @@
+/*!
+ * NumberToArabicWords (https://mahmoudshahin1111.github.io/numbers-to-arabic-words/)
+ * Copyright 2022 The NumberToArabicWords Authors (https://github.com/mahmoudshahin1111/numbers-to-arabic-words/contributors)
+ * Licensed under MIT (https://github.com/mahmoudshahin1111/numbers-to-arabic-words/blob/master/LICENSE)
+ */
+
 !(function (e, r) {
     if ('object' == typeof exports && 'object' == typeof module)
         module.exports = r()
