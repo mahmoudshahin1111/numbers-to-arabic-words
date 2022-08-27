@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "lib": ["es2015"],
+    "module": "es6",
     "strict": true,
-    "declaration": false,
+    "moduleResolution": "node",
+    "declaration": true,
     "outDir": "dist",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports":true,
-    "strictNullChecks": false
-    // "sourceMap": true
+    "strictNullChecks": false,
+    "declarationMap": true,
+    "sourceMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
