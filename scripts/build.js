@@ -25,6 +25,7 @@ function execute() {
     );
     const indexFileContent = fs.readFileSync(indexPath, "utf8");
     fs.writeFileSync(indexPath, FILE_HEADERS + "\n" + indexFileContent);
+    execSync(`npx prettier ${indexPath} --write`);
     console.log("Builded");
   } catch (e) {
     console.log("Build Fails");
