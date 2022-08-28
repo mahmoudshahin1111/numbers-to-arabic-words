@@ -2,5 +2,9 @@
 .vscode
 .gitignore
 scripts
-examples
+public
 src
+webpack.config.js
+jest.config.js
+.prettierrc.json
+examples

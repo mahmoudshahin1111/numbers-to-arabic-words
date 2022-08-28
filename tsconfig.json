@@ -1,15 +1,9 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "es6",
-    "strict": true,
-    "moduleResolution": "node",
-    "declaration": true,
-    "outDir": "dist",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports":true,
-    "strictNullChecks": false,
-    "declarationMap": true,
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./build-tsc",
     // "sourceMap": true
   },
   "include": ["src/**/*"],

@@ -5,8 +5,14 @@
     "main": "dist/index.js",
     "buildPath": "dist",
     "scripts": {
+        "clean": "npm run clean-build-steps && rm -rf dist",
+        "tsc": "./node_modules/.bin/tsc",
+        "babel": "./node_modules/.bin/babel build-tsc --out-dir build-babel --source-maps",
+        "webpack": "webpack",
+        "clean-build-steps": "rm -rf build-tsc build-babel",
+        "build:prebuild": "npm run clean && npm run tsc && npm run babel && npm run webpack && npm run clean-build-steps",
+        "build":"node scripts/build.js",
         "run": "tsc & node index.js",
-        "build": "node scripts/build.js",
         "deploy": "npm run build && node scripts/deploy.js",
         "test": "node scripts/test.js"
     },
@@ -42,6 +48,7 @@
     "devDependencies": {
         "@babel/cli": "^7.17.10",
         "@babel/core": "^7.17.10",
+        "@babel/plugin-transform-typescript": "^7.18.12",
         "@babel/preset-env": "^7.17.10",
         "@babel/preset-typescript": "^7.16.7",
         "@types/fs-extra": "^9.0.7",
@@ -50,7 +57,7 @@
         "@types/webpack": "^5.28.0",
         "@types/webpack-dev-server": "^4.7.2",
         "@webpack-cli/generators": "^2.4.2",
-        "babel-loader": "^8.2.5",
+        "babel-preset-env": "^1.7.0",
         "fs": "0.0.1-security",
         "fs-extra": "^9.1.0",
         "imports-loader": "^2.0.0",
@@ -64,5 +71,6 @@
         "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.9.0"
-    }
+    },
+    "browserslist": "> 0.25%, not dead"
 }
