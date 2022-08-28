@@ -1,27 +1,27 @@
-const path = require('path');
-require('webpack-dev-server');
+const path = require('path')
 
-const config = {
-    mode: 'production',
-    entry: './src/index.ts',
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
-            },
-        ],
-    },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-    },
-
+const browserConfig = {
+    devtool: 'source-map',
+    entry: './build-babel/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
-        libraryTarget: 'umd',
+        path: path.resolve(__dirname, 'dist'),
+        library: {
+            type: 'window',
+        },
     },
 }
 
-module.exports = config
+const nodeConfig = {
+    devtool: 'source-map',
+    entry: './build-babel/index.js',
+    output: {
+        filename: 'index-node.js',
+        path: path.resolve(__dirname, 'dist'),
+        library: {
+            type: 'commonjs',
+        },
+    },
+}
+
+module.exports = [browserConfig, nodeConfig]
