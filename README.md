@@ -1,11 +1,8 @@
-# Numbers To Arabic Words
-
 [![npm version](https://badge.fury.io/js/number-to-arabic-words.svg)](https://badge.fury.io/js/number-to-arabic-words)
 ![example workflow](https://github.com/mahmoudshahin1111/numbers-to-arabic-words/actions/workflows/.github/workflows/test.yml/badge.svg)
 
----
-
-![Like That 👌](https://lh3.googleusercontent.com/pw/ACtC-3csUySSi5X3aOZ3cjYuwuDX1oUrxYUEJij3Bh-1AmMm2jlZBsu5tGoDjlvsTyubMJZHTZAKjK8iNBQm-UQacJef8GEcCDRtfLF0C5DRty8iLfhVKY7oAzCAoNZ4jqpcf88nG6KmNhkj-hrEqMLiiw2K=w1670-h693-no?authuser=0)
+# Numbers To Arabic Words
+is a library to transform the numbers into Arabic words without any external dependencies and it's so fast and stable because it's build in typescript.
 
 # Why do you Need to use it ?
 
@@ -19,15 +16,23 @@
 -   Support unlimited number length more than 100000000000000000000 "كوادرليون" 😲
 -   Just only one function `toArabicWord(1000)` do this magic 👌
 
-## Browser
-
+## How To Install ?
+### Browser
 ```html
 <script src="https://cdn.jsdelivr.net/npm/number-to-arabic-words@latest/dist/index.js"></script>
 <script>
     toArabicWord(1000)
 </script>
 ```
-## NodeJs
+### Npm
+```bash
+    npm i number-to-arabic-words
+```
+### Yarn
+```bash
+    yarn add number-to-arabic-words
+```
+### NodeJs
 
 ```javascript
 const NumbersToArabicWords = require('dist/index-node.js')
