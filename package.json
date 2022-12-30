@@ -1,13 +1,13 @@
 {
     "name": "number-to-arabic-words",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "convert numbers to arabic words  made with typescript so it fast and maintainable - تحويل الارقام الي كلمات عربيه أداه متجدده بأستمرار و سريعه ",
     "main": "dist/index.js",
     "buildPath": "dist",
     "scripts": {
         "clean": "npm run clean-build-steps && rm -rf dist",
-        "tsc": "./node_modules/.bin/tsc",
-        "babel": "./node_modules/.bin/babel build-tsc --out-dir build-babel --source-maps",
+        "tsc": "tsc",
+        "babel": "babel build-tsc --out-dir build-babel --source-maps",
         "webpack": "webpack",
         "clean-build-steps": "rm -rf build-tsc build-babel",
         "build:prebuild": "npm run clean && npm run tsc && npm run babel && npm run webpack && npm run clean-build-steps",
