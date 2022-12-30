@@ -39,6 +39,17 @@ const NumbersToArabicWords = require('dist/index-node.js')
 NumbersToArabicWords.toArabicWord(1000)
 ```
 
+## Typescript 
+```typescript
+
+import { toArabicWord } from 'number-to-arabic-words/dist/index-node.js';
+toArabicWord(1000);
+
+```
+## React 
+Check this discussion [How to use this library in Reactjs ?](https://github.com/mahmoudshahin1111/numbers-to-arabic-words/discussions/11)
+By [@RedaTheCeo](https://github.com/RedaTheCeo)
+
 ### Examples
 
 | Number                   | Result                                     |
