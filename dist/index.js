@@ -1,6 +1,6 @@
 /*!
  * NumberToArabicWords (https://mahmoudshahin1111.github.io/numbers-to-arabic-words/)
- * Copyright 2022 The NumberToArabicWords Authors (https://github.com/mahmoudshahin1111/numbers-to-arabic-words/contributors)
+ * Copyright 2023 The NumberToArabicWords Authors (https://github.com/mahmoudshahin1111/numbers-to-arabic-words/contributors)
  * Licensed under MIT (https://github.com/mahmoudshahin1111/numbers-to-arabic-words/blob/master/LICENSE)
  */
 
@@ -15,7 +15,7 @@
                 r.NumberSection =
                 r.ArabicWordConfig =
                     void 0)
-        var i = (function () {
+        var t = (function () {
             function e() {
                 ;(this.config = {
                     delimiter: 'فاصل',
@@ -24,6 +24,7 @@
                         return 'ون'
                     },
                 }),
+                    (this.feminizeSign = 'ة'),
                     (this.numbers = {
                         0: 'صفر',
                         1: 'واحد',
@@ -83,8 +84,8 @@
                 e
             )
         })()
-        r.ArabicWordConfig = i
-        var t = (function () {
+        r.ArabicWordConfig = t
+        var i = (function () {
             function e(e) {
                 this.arabicWordConfig = e
             }
@@ -93,65 +94,75 @@
                     return this.processSection(e).reverse()
                 }),
                 (e.prototype.processSection = function (e) {
+                    return 0 === Number(e)
+                        ? this.processZero()
+                        : this.processGreaterThanZero(e)
+                }),
+                (e.prototype.processZero = function () {
+                    return this.getWordForZero()
+                }),
+                (e.prototype.processGreaterThanZero = function (e) {
                     var r = this,
-                        i = this.splitIntoParts(e),
-                        t = []
+                        t = this.splitIntoParts(e),
+                        i = []
                     return (
-                        i.forEach(function (e, i) {
-                            var n = r.getWordByNumberSectionIndex(e, i)
-                            n && t.push(n)
+                        t.forEach(function (e, t) {
+                            var o = r.getWordByNumberSectionIndex(e, t)
+                            o && i.push(o)
                         }),
-                        t
+                        i
                     )
                 }),
+                (e.prototype.getWordForZero = function () {
+                    return [this.arabicWordConfig.numbers[0]]
+                }),
                 (e.prototype.splitIntoParts = function (e) {
-                    for (var r = [], i = e.length - 1; ; ) {
-                        var t =
-                            (null != e[i - 2] ? e[i - 2] : '0') +
-                            (null != e[i - 1] ? e[i - 1] : '0') +
-                            (null != e[i] ? e[i] : '0')
-                        if ((r.push(t), i < 0)) break
-                        i -= 3
+                    for (var r = [], t = e.length - 1; t >= 0; t -= 3) {
+                        var i =
+                            (null != e[t - 2] ? e[t - 2] : '0') +
+                            (null != e[t - 1] ? e[t - 1] : '0') +
+                            (null != e[t] ? e[t] : '0')
+                        r.push(i)
                     }
                     return r
                 }),
                 (e.prototype.getWordByNumberSectionIndex = function (e, r) {
-                    var i = Number(e),
-                        t = null
-                    if (0 == r) t = this.getWordForPart(e)
-                    else if (1 == i)
-                        t = this.arabicWordConfig.numbers['1e'.concat(3 * r)]
-                    else if (2 == i)
-                        t = this.arabicWordConfig.numbers['2e'.concat(3 * r)]
+                    var t = Number(e),
+                        i = null
+                    if (0 == r) i = this.getWordForPart(e)
+                    else if (1 == t)
+                        i = this.arabicWordConfig.numbers['1e'.concat(3 * r)]
+                    else if (2 == t)
+                        i = this.arabicWordConfig.numbers['2e'.concat(3 * r)]
                     else {
-                        var n = this.getWordForPart(e) + ' '
-                        i >= 3 && i <= 10
-                            ? (t = n +=
+                        var o = this.getWordForPart(e) + ' '
+                        t >= 3 && t <= 10
+                            ? (i = o +=
                                   this.arabicWordConfig.numbers[
                                       '3e'
                                           .concat(3 * r, '-1e')
                                           .concat(3 * r + 1)
                                   ])
-                            : i >= 11 &&
-                              (t = n +=
+                            : t >= 11 &&
+                              (i = o +=
                                   this.arabicWordConfig.numbers[
                                       '1e'.concat(3 * r + 1, '+')
                                   ])
                     }
-                    return t
+                    return i
                 }),
                 (e.prototype.getWordForPart = function (e) {
                     var r = e[0],
-                        i = e[1],
-                        t = e[2],
-                        n = this.getWordForHundreds(r),
-                        o = i + t,
-                        s = Number(o),
-                        c = this.getWordForTens(o)
+                        t = e[1],
+                        i = e[2],
+                        o = this.getWordForHundreds(r),
+                        n = t + i,
+                        s = Number(n),
+                        c = this.getWordForTens(n)
                     return 0 == s
-                        ? n
-                        : n
-                        ? n +
+                        ? o
+                        : o
+                        ? o +
                           ' ' +
                           this.arabicWordConfig.getAll()
                               .numberSectionsDelimiter +
@@ -161,17 +172,17 @@
                 }),
                 (e.prototype.getWordForHundreds = function (e) {
                     var r = Number(e),
-                        i = null
+                        t = null
                     return (
                         1 == r
-                            ? (i = this.arabicWordConfig.numbers[100])
+                            ? (t = this.arabicWordConfig.numbers[100])
                             : 2 == r
-                            ? (i = this.arabicWordConfig.numbers[200])
+                            ? (t = this.arabicWordConfig.numbers[200])
                             : r >= 3 &&
                               r <= 9 &&
-                              (i =
+                              (t =
                                   this.getWordFromThreeHundredToNineHundred(e)),
-                        i
+                        t
                     )
                 }),
                 (e.prototype.getWordFromThreeHundredToNineHundred = function (
@@ -187,12 +198,19 @@
                     return 0 == r
                         ? this.arabicWordConfig.numbers[0]
                         : r >= 1 && r <= 12
-                        ? this.arabicWordConfig.numbers[r]
+                        ? 10 == r
+                            ? this.getWordForTen(r)
+                            : this.arabicWordConfig.numbers[r]
                         : r >= 13 && r <= 19
                         ? this.getWordFromThirteenToNineTeen(e)
                         : r >= 20 && r <= 99
                         ? this.getWordFromTwentyToNinetyNine(e)
                         : null
+                }),
+                (e.prototype.getWordForTen = function (e) {
+                    return ''
+                        .concat(this.arabicWordConfig.numbers[e])
+                        .concat(this.arabicWordConfig.feminizeSign)
                 }),
                 (e.prototype.getWordFromThirteenToNineTeen = function (e) {
                     return (
@@ -203,29 +221,29 @@
                 }),
                 (e.prototype.getWordFromTwentyToNinetyNine = function (e) {
                     var r = e[0],
-                        i = e[1],
-                        t = Number(r),
-                        n = Number(i),
-                        o = null,
+                        t = e[1],
+                        i = Number(r),
+                        o = Number(t),
+                        n = null,
                         s = null
                     return (
-                        2 == t
-                            ? (o = this.arabicWordConfig.numbers[20])
-                            : t >= 3 &&
-                              t <= 9 &&
-                              (o =
+                        2 == i
+                            ? (n = this.arabicWordConfig.numbers[20])
+                            : i >= 3 &&
+                              i <= 9 &&
+                              (n =
                                   this.arabicWordConfig.numbers[r] +
                                   this.arabicWordConfig.getAll().tensPrefix),
-                        0 == n
-                            ? o
-                            : (t >= 1 && t <= 9
-                                  ? (s = this.arabicWordConfig.numbers[i])
-                                  : 10 === t
+                        0 == o
+                            ? n
+                            : (i >= 1 && i <= 9
                                   ? (s = this.arabicWordConfig.numbers[t])
-                                  : t >= 11 && t <= 12
+                                  : 10 === i
+                                  ? (s = this.arabicWordConfig.numbers[i])
+                                  : i >= 11 && i <= 12
                                   ? (s = this.arabicWordConfig.numbers[e])
-                                  : t >= 13 &&
-                                    t <= 19 &&
+                                  : i >= 13 &&
+                                    i <= 19 &&
                                     (s = this.getWordFromThirteenToNineTeen(e)),
                               s +
                                   (s
@@ -234,17 +252,17 @@
                                             .numberSectionsDelimiter +
                                         ' '
                                       : '') +
-                                  o)
+                                  n)
                     )
                 }),
                 e
             )
         })()
-        r.NumberSection = t
-        var n = (function () {
+        r.NumberSection = i
+        var o = (function () {
             function e(e) {
-                ;(this.config = new i()),
-                    (this.numberSection = new t(this.config)),
+                ;(this.config = new t()),
+                    (this.numberSection = new i(this.config)),
                     (this.delimiter = 'و'),
                     e && this.setConfig(e)
             }
@@ -255,30 +273,30 @@
                 (e.prototype.process = function (e) {
                     var r = this.splitIntoSections(e)
                     if (this.config.getAll().strict) {
-                        var i = {}
+                        var t = {}
                         return (
                             r[0] &&
-                                (i.base = this.numberSection
+                                (t.base = this.numberSection
                                     .process(r[0])
                                     .join(' '.concat(this.delimiter, ' '))),
                             r[1] &&
-                                ((i.delimiter = this.config.getAll().delimiter),
-                                (i.reminder = this.numberSection
+                                ((t.delimiter = this.config.getAll().delimiter),
+                                (t.reminder = this.numberSection
                                     .process(r[1])
                                     .join(' '.concat(this.delimiter, ' ')))),
-                            i
+                            t
                         )
                     }
-                    var t = []
+                    var i = []
                     if (r[0]) {
-                        var n = this.numberSection.process(r[0])
-                        t.push(n.join(' '.concat(this.delimiter, ' ')))
+                        var o = this.numberSection.process(r[0])
+                        i.push(o.join(' '.concat(this.delimiter, ' ')))
                     }
                     if (r[1]) {
-                        var o = this.numberSection.process(r[1])
-                        t.push(o.join(' '.concat(this.delimiter, ' ')))
+                        var n = this.numberSection.process(r[1])
+                        i.push(n.join(' '.concat(this.delimiter, ' ')))
                     }
-                    return t.join(
+                    return i.join(
                         ' '.concat(this.config.getAll().delimiter, ' ')
                     )
                 }),
@@ -291,14 +309,14 @@
                 e
             )
         })()
-        ;(r.ArabicWord = n),
-            (r.arabicWord = new n()),
+        ;(r.ArabicWord = o),
+            (r.arabicWord = new o()),
             (r.toArabicWord = function (e) {
                 return r.arabicWord.process(e)
             })
     })(0, e)
     var r = window
-    for (var i in e) r[i] = e[i]
+    for (var t in e) r[t] = e[t]
     e.__esModule && Object.defineProperty(r, '__esModule', { value: !0 })
 })()
 //# sourceMappingURL=index.js.map
