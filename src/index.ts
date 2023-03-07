@@ -8,6 +8,7 @@ export class ArabicWordConfig {
             return 'ون'
         }, // readonly
     }
+    feminizeSign: string = 'ة';
     numbers: { [key: string]: string } = {
         '0': 'صفر',
         '1': 'واحد',
@@ -72,6 +73,18 @@ export class NumberSection {
         return this.processSection(num).reverse()
     }
     private processSection(section: string) {
+        if (Number(section) === 0) {
+            return this.processZero()
+        } else {
+            return this.processGreaterThanZero(section)
+        }
+    }
+
+    private processZero() {
+        return this.getWordForZero()
+    }
+    private processGreaterThanZero(section: string) {
+        // the section greater than zero
         const parts = this.splitIntoParts(section)
         let partsAsWords: string[] = []
         parts.forEach((p, i) => {
@@ -82,6 +95,10 @@ export class NumberSection {
         })
         return partsAsWords
     }
+
+    private getWordForZero(): string[] {
+        return [this.arabicWordConfig.numbers[0]]
+    }
     /**
      * convert the number to parts every part has 3 numbers for example
      * 10 to be 010 and 12345 to be 012345
@@ -90,19 +107,13 @@ export class NumberSection {
      */
     private splitIntoParts(word: string): string[] {
         const parts: string[] = []
-        let counter = word.length - 1
-        while (true) {
+        for (let i = word.length - 1; i >= 0; i -= 3) {
             let part =
-                (word[counter - 2] != null ? word[counter - 2] : '0') +
-                (word[counter - 1] != null ? word[counter - 1] : '0') +
-                (word[counter] != null ? word[counter] : '0')
+                (word[i - 2] != null ? word[i - 2] : '0') +
+                (word[i - 1] != null ? word[i - 1] : '0') +
+                (word[i] != null ? word[i] : '0')
             parts.push(part)
-            if (counter < 0) {
-                break
-            }
-            counter -= 3
         }
-
         return parts
     }
 
@@ -183,6 +194,9 @@ export class NumberSection {
         if (tensNum == 0) {
             return this.arabicWordConfig.numbers[0]
         } else if (tensNum >= 1 && tensNum <= 12) {
+            if (tensNum == 10) {
+                return this.getWordForTen(tensNum)
+            }
             return this.arabicWordConfig.numbers[tensNum]
         } else if (tensNum >= 13 && tensNum <= 19) {
             return this.getWordFromThirteenToNineTeen(tensGroup)
@@ -190,6 +204,10 @@ export class NumberSection {
             return this.getWordFromTwentyToNinetyNine(tensGroup)
         }
         return null
+    }
+
+    private getWordForTen(num: number) {
+        return `${this.arabicWordConfig.numbers[num]}${this.arabicWordConfig.feminizeSign}`;
     }
 
     private getWordFromThirteenToNineTeen(numGroup: string) {

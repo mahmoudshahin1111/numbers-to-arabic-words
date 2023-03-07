@@ -7,6 +7,22 @@ describe("Testing To Arabic Word Module", () => {
     const newArabicWordObject = arabicWord.create();
     const mockNumbers = [
       {
+        num: 0,
+        translated: "صفر",
+      },
+      {
+        num: 0.12,
+        translated: "صفر فاصل إثنا عشر",
+      },
+      {
+        num: 10.11,
+        translated: "عشرة فاصل إحدى عشر",
+      },
+      {
+        num: 10,
+        translated: "عشرة",
+      },
+      {
         num: 100,
         translated: "مائة",
       },
@@ -122,4 +138,5 @@ describe("Testing To Arabic Word Module", () => {
       expect(unit.result).toEqual(newArabicWordObject.process(unit.num));
     }
   });
+
 });
